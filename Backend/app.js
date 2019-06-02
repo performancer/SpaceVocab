@@ -7,6 +7,7 @@ const mongoose = require('mongoose')
 const { errorHandler } = require('./utils/middleware')
 
 const userRouter = require('./controllers/users')
+const reviewRouter = require('./controllers/reviews')
 const packageRouter = require('./controllers/packages')
 
 app.use(bodyParser.json())
@@ -22,6 +23,7 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
     })
 
 app.use('/api/users', userRouter)
+app.use('/api/reviews', reviewRouter)
 app.use('/api/packages', packageRouter)
 
 app.use(errorHandler)
