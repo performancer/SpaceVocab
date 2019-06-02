@@ -1,8 +1,7 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
-const jwt = require('jsonwebtoken')
+const helper = require('../utils/helper')
 const User = require('../models/user')
-const Package = require('../models/package')
 
 router.get('/', async (request, response, next) => {
     try {
@@ -43,66 +42,41 @@ router.post('/', async (request, response, next) => {
     }
 })
 
+router.get('/packages', async (request, response, next) => {
+    try {
+        const user = await helper.getUser(request.token)
+
+        if (!user)
+            return response.status(401).json({ error: 'token missing or invalid' })
+
+        response.json(user.packages)
+
+    } catch (exception) {
+        next(exception)
+    }
+})
+
+router.get('/packages/:package', async (request, response, next) => {
+    try {
+        const user = await helper.getUser(request.token)
+
+        if (!user)
+            return response.status(401).json({ error: 'token missing or invalid' })
+
+        const package = user.packages.find(p => p.id === request.params.package)
+        response.json(package)
+
+    } catch (exception) {
+        next(exception)
+    }
+})
+
 router.get('/:id', async (request, response, next) => {
     try {
         //TODO: should be visible only to administrator and to user themselves
 
         const user = await User.findById(request.params.id)
         response.json(user)
-    } catch (exception) {
-        next(exception)
-    }
-})
-
-router.get('/:id/packages', async (request, response, next) => {
-    try {
-        //TODO: tokens
-
-        const user = await User.findById(request.params.id)
-        response.json(user.packages)
-    } catch (exception) {
-        next(exception)
-    }
-})
-
-router.post('/:id/packages', async (request, response, next) => {
-    try {
-        //TODO: tokens
-
-        const user = await User.findById(request.params.id)
-        const source = await Package.findById(request.body.package)
-
-        const words = source.words.map(word =>  {
-            return {
-                word: word.id,
-                synonyms: [], //user customized synonyms
-                reviews: []   //user's reviews of this word
-            }
-        })
-
-        //user version of package that is used to store reviews and custom synonyms
-        //the word attribute for each word is only a reference
-        const package = {
-            source: source.id,
-            words: words
-        }
-
-        user.packages = user.packages.concat(package)
-        await user.save()
-        response.json(user)
-
-    } catch (exception) {
-        next(exception)
-    }
-})
-
-router.get('/:id/packages/:package', async (request, response, next) => {
-    try {
-        //TODO: tokens
-
-        const user = await User.findById(request.params.id)
-        const package = user.packages.find(p => p.id === request.params.package)
-        response.json(package)
     } catch (exception) {
         next(exception)
     }

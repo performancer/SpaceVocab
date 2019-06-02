@@ -1,13 +1,14 @@
 const router = require('express').Router()
-const jwt = require('jsonwebtoken')
-const User = require('../models/user')
+const helper = require('../utils/helper')
 const Package = require('../models/package')
 
-router.get('/:id/:package/', async (request, response, next) => {
+router.get('/:package', async (request, response, next) => {
     try {
-        //TODO: tokens
+        const user = await helper.getUser(request.token)
 
-        const user = await User.findById(request.params.id)
+        if (!user)
+            return response.status(401).json({ error: 'token missing or invalid' })
+
         const package = user.packages.find(p => p.id === request.params.package)
 
         const review = package.words.filter(word => {
@@ -39,11 +40,13 @@ router.get('/:id/:package/', async (request, response, next) => {
     }
 })
 
-router.put('/:id/:package/:word', async (request, response, next) => {
+router.put('/:package/:word', async (request, response, next) => {
     try {
-        //TODO: tokens
+        const user = await helper.getUser(request.token)
 
-        const user = await User.findById(request.params.id)
+        if (!user)
+            return response.status(401).json({ error: 'token missing or invalid' })
+
         const package = user.packages.find(p => p.id === request.params.package)
         const word = package.words.find(w => w.id === request.params.word)
         const answer = request.body.answer     //answer submitted by the user

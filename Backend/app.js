@@ -4,8 +4,9 @@ const app = express()
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
-const { errorHandler } = require('./utils/middleware')
+const { tokenExtractor, errorHandler } = require('./utils/middleware')
 
+const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/users')
 const reviewRouter = require('./controllers/reviews')
 const packageRouter = require('./controllers/packages')
@@ -22,6 +23,9 @@ mongoose.connect(config.MONGODB_URI, { useNewUrlParser: true })
         console.log('error connection to MongoDB:', error.message)
     })
 
+app.use(tokenExtractor)
+
+app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter)
 app.use('/api/reviews', reviewRouter)
 app.use('/api/packages', packageRouter)
