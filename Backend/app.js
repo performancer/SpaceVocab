@@ -1,6 +1,7 @@
 const config = require('./utils/config')
 const express = require('express')
 const app = express()
+const cors = require('cors')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
 
@@ -11,6 +12,7 @@ const userRouter = require('./controllers/users')
 const reviewRouter = require('./controllers/reviews')
 const packageRouter = require('./controllers/packages')
 
+app.use(cors())
 app.use(bodyParser.json())
 
 console.log('connecting to', config.MONGODB_URI)
