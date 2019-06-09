@@ -1,14 +1,6 @@
 import React, { useState, useEffect }  from 'react';
-
-import LoginForm from '../components/LoginForm'
-import Togglable from '../components/Togglable'
-import PackageInfo from '../components/PackageInfo'
 import UserPackage from '../components/UserPackage'
-
-import loginService from '../services/login'
 import packageService from '../services/packages'
-
-import token from '../utils/token'
 
 const Home = ({user}) => {
   const [packages, setPackages] = useState([])
@@ -23,23 +15,6 @@ const Home = ({user}) => {
       setMyPackages([])
     }
   }, [user])
-
-  const addPackage = async (id) => {
-      if(!user) {
-        console.log("you are not logged in")
-        return;
-      }
-
-      if( myPackages.find(mp => mp.source === id) ){
-        console.log("you have already subscribed to this package")
-        return;
-      }
-
-      console.log(`adding ${id} package to your list`)
-      const response = await packageService.addPackage(id)
-      setMyPackages([...myPackages, response])
-      console.log('package added')
-  }
 
   const removePackage = async (id) => {
       if(!user) {
@@ -57,28 +32,10 @@ const Home = ({user}) => {
       }
   }
 
-  const renderPackages = () => {
-
-    if(!myPackages || !packages)
-      return;
-
-    return (
-      <div>
-        <h2>My Packages</h2>
-        { myPackages.map(p => <UserPackage key={p._id} content={p} remove={removePackage} />)}
-
-      </div>
-    )
-  }
-
-  const getSource = (id) => {
-    const source = packages.find(p => p._id === id)
-    return source
-  }
-
   return (
-    <div className="App">
-      { renderPackages() }
+    <div>
+      <h2>My Packages</h2>
+      { myPackages.map(p => <UserPackage key={p._id} content={p} remove={removePackage} />)}
     </div>
   )
 }

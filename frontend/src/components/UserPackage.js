@@ -19,7 +19,8 @@ const UserPackage = ({content, remove}) => {
   return (
     <div style={style} >
       <h4>{content._id}</h4>
-      <button onClick={() => remove(content._id)}>remove</button>
+      <button onClick={() => remove(content._id)}>unsubsribe</button>
+      <button>like</button>
       <p>reviews: {reviews.length}</p>
     </div>
   )

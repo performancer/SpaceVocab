@@ -43,12 +43,6 @@ const LoginForm = (props) => {
       }
   }
 
-  const style = {
-    backgroundColor: '#335',
-    color: '#FFF',
-    padding: 5,
-  }
-
   const renderModal = () => {
     return (
       <div className="modal">
@@ -75,7 +69,7 @@ const LoginForm = (props) => {
 
   const renderUser = () => {
     return(
-      <div style={style}>
+      <div className='banner'>
         <p>
           Logged in as {user.username}
           <button onClick={handleLogout}>Log out</button>
@@ -86,7 +80,7 @@ const LoginForm = (props) => {
 
   const renderLogin = () => {
     return (
-      <div style={style}>
+      <div className='banner'>
         <p>
           You are not logged in. <button onClick={() => setVisible(true)}>Login</button> or <button onClick={() => signup()}>Sign up</button>
         </p>

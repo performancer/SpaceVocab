@@ -1,9 +1,7 @@
 import React from 'react'
 import Togglable from './Togglable'
 
-const PackageInfo = ({content, handlers}) => {
-  const {handle, text} = handlers
-
+const PackageInfo = ({user, subscribed, content, handleAdd, handleRemove}) => {
   const style = {
     borderStyle: 'solid',
     borderColor: 'gray',
@@ -16,13 +14,25 @@ const PackageInfo = ({content, handlers}) => {
     margin: 5
   }
 
+  const buttons = () => {
+    if(user) {
+      console.log(user)
+      return (
+        <div>
+          { subscribed ?
+            <button onClick={ () => handleRemove(content._id)}>unsubsribe</button> :
+            <button onClick={ () => handleAdd(content._id)}>subscribe</button>
+          }
+          <button>like</button>
+        </div>
+      )
+    }
+  }
+
   return (
     <div style={style} >
     <h4>{content.name}</h4>
-
-    <button onClick={ () => handle(content._id)}>{text}</button>
-    <button>like</button>
-
+    {buttons()}
     <p>
       Language: {content.language}<br />
       Words: {content.words.length}<br />

@@ -7,7 +7,7 @@ import UserPackage from '../components/UserPackage'
 
 import packageService from '../services/packages'
 
-const Home = ({user}) => {
+const Packages = ({user}) => {
   const [packages, setPackages] = useState([])
   const [myPackages, setMyPackages] = useState([])
 
@@ -58,20 +58,21 @@ const Home = ({user}) => {
     }
   }
 
-  const getMode = (id) => {
-      if(myPackages.find(p => p.source === id)) {
-        return { handle: removePackage, text: 'unsubscribe'}
-      } else {
-        return { handle: addPackage, text:'subscribe'}
-      }
-  }
-
   return (
     <div>
       <h2>Public Packages</h2>
-      { packages.map(p => <PackageInfo key={p._id} content={p} handlers={getMode(p._id)}/>) }
+      {packages.map(p =>
+        <PackageInfo
+          key={p._id}
+          user={user}
+          subscribed={myPackages.find(m => m.source === p._id) ? true : false}
+          content={p}
+          handleAdd={addPackage}
+          handleRemove={removePackage}
+        />
+      )}
     </div>
   )
 }
 
-export default Home;
+export default Packages;
