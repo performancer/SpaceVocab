@@ -73,30 +73,37 @@ const LoginForm = (props) => {
     )
   }
 
+  const renderUser = () => {
+    return(
+      <div style={style}>
+        <p>
+          Logged in as {user.username}
+          <button onClick={handleLogout}>Log out</button>
+        </p>
+      </div>
+    )
+  }
+
+  const renderLogin = () => {
+    return (
+      <div style={style}>
+        <p>
+          You are not logged in. <button onClick={() => setVisible(true)}>Login</button> or <button onClick={() => signup()}>Sign up</button>
+        </p>
+      </div>
+    )
+  }
+
   return (
     <div>
-      {
-        user ?
-        <div style={style}>
-          <p>
-            Logged in as {user.username}
-            <button onClick={handleLogout}>Log out</button>
-          </p>
-        </div>
-        :
-        <div style={style}>
-          <p>
-            You are not logged in. <button onClick={() => setVisible(true)}>Login</button> or <button onClick={() => signup()}>Sign up</button>
-          </p>
-        </div>
-      }
-      {visible ? renderModal() : ""}
+      { user ? renderUser() : renderLogin() }
+      { (!user && visible) ? renderModal() : "" }
     </div>
   )
 }
 
 LoginForm.propTypes = {handleLogin: PropTypes.func.isRequired}
 
-const LoginFormWithHistory = withRouter(LoginForm)
+const Login = withRouter(LoginForm)
 
-export default LoginFormWithHistory
+export default Login
