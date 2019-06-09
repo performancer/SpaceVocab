@@ -1,6 +1,5 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
-const helper = require('../utils/helper')
 const User = require('../models/user')
 
 router.get('/', async (request, response, next) => {
@@ -36,35 +35,6 @@ router.post('/', async (request, response, next) => {
 
         const savedUser = await user.save()
         response.json(savedUser)
-
-    } catch (exception) {
-        next(exception)
-    }
-})
-
-router.get('/packages', async (request, response, next) => {
-    try {
-        const user = await helper.getUser(request.token)
-
-        if (!user)
-            return response.status(401).json({ error: 'token missing or invalid' })
-
-        response.json(user.packages)
-
-    } catch (exception) {
-        next(exception)
-    }
-})
-
-router.get('/packages/:package', async (request, response, next) => {
-    try {
-        const user = await helper.getUser(request.token)
-
-        if (!user)
-            return response.status(401).json({ error: 'token missing or invalid' })
-
-        const package = user.packages.find(p => p.id === request.params.package)
-        response.json(package)
 
     } catch (exception) {
         next(exception)

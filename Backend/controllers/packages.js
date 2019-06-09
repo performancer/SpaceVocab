@@ -77,6 +77,8 @@ router.get('/:package/:word', async (request, response, next) => {
 })
 
 router.post('/', async (request, response, next) => {
+    // administrator only
+
     try {
         const { name, language, words } = request.body
 

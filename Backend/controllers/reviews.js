@@ -11,6 +11,9 @@ router.get('/:package', async (request, response, next) => {
 
         const package = user.packages.find(p => p.id === request.params.package)
 
+        if(!package)
+            response.status(404).json({ error: 'no such package' })
+
         const review = package.words.filter(word => {
             //if this word has not been reviewed before, it can be reviewed
             if(!word.reviews || word.reviews.length === 0)

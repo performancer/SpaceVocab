@@ -9,6 +9,7 @@ const { tokenExtractor, errorHandler } = require('./utils/middleware')
 
 const loginRouter = require('./controllers/login')
 const userRouter = require('./controllers/users')
+const dataRouter = require('./controllers/data')
 const reviewRouter = require('./controllers/reviews')
 const packageRouter = require('./controllers/packages')
 
@@ -29,6 +30,7 @@ app.use(tokenExtractor)
 
 app.use('/api/login', loginRouter)
 app.use('/api/users', userRouter)
+app.use('/api/data', dataRouter)
 app.use('/api/reviews', reviewRouter)
 app.use('/api/packages', packageRouter)
 
