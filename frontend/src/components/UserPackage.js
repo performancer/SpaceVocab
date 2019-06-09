@@ -10,9 +10,10 @@ const UserPackage = ({content, remove}) => {
   }, [content._id])
 
   const style = {
-    'borderStyle': 'solid',
-    'borderColor': 'gray',
-    'borderRadius': '5px'
+    borderStyle: 'solid',
+    borderColor: 'gray',
+    borderRadius: '5px',
+    padding: '5px'
   }
 
   return (
