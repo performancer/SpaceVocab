@@ -4,7 +4,7 @@ import reviewService from '../services/reviews'
 import '../styles.css'
 
 const UserPackage = (props) => {
-  const {content, remove} = props
+  const {content, remove, reviewHandler} = props
   const [reviews, setReviews] = useState(null)
 
   useEffect(() => {
@@ -13,6 +13,7 @@ const UserPackage = (props) => {
 
   const startReview = () => {
     console.log('start reviews')
+    reviewHandler(content)
     props.history.push('/review')
   }
 

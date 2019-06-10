@@ -10,4 +10,17 @@ const get = (id) => {
   return request.then(response => response.data)
 }
 
-export default { get }
+const review = async (pack, word, answer) => {
+  const config = {
+    headers: { Authorization: token.getToken() },
+  }
+
+  const body = {
+    answer: answer
+  }
+
+  const response = await axios.put(`${baseUrl}/${pack}/${word}`, body, config)
+  return response.data
+}
+
+export default { get, review }

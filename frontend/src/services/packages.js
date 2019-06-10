@@ -3,19 +3,18 @@ import token from '../utils/token'
 const commonUrl = '/api/packages'
 const userUrl = '/api/data/packages'
 
-const getPublic = () => {
-  const request = axios.get(commonUrl)
-  return request.then(response => response.data)
+const getPublic = async () => {
+  const response = await axios.get(commonUrl)
+  return response.data
 }
 
-
-const getMine = () => {
+const getMine = async () => {
   const config = {
     headers: { Authorization: token.getToken() },
   }
 
-  const request = axios.get(userUrl, config)
-  return request.then(response => response.data)
+  const response = await axios.get(userUrl, config)
+  return response.data
 }
 
 const addPackage = async (id) => {
@@ -30,8 +29,8 @@ const addPackage = async (id) => {
 }
 
 const getPackage = async (id) => {
-  const request = axios.get(`${commonUrl}/${id}`)
-  return request.data
+  const response = await axios.get(`${commonUrl}/${id}`)
+  return response.data
 }
 
 const removePackage = async (id) => {
@@ -43,5 +42,10 @@ const removePackage = async (id) => {
   return response.data
 }
 
+const getWord = async (pack, id) => {
+  const response = await axios.get(`${commonUrl}/${pack}/${id}`)
+  return response.data
+}
 
-export default { getPublic, getMine, addPackage, getPackage, removePackage }
+
+export default { getPublic, getMine, addPackage, getPackage, removePackage, getWord }

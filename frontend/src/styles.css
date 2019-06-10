@@ -6,6 +6,10 @@ body {
   color: red
 }
 
+.success {
+  color: green
+}
+
 .banner {
   background-color: #335;
   color: #FFF;
@@ -50,4 +54,17 @@ body {
 .word {
   background-color: LightBlue;
   margin: 5px;
+}
+
+.details {
+  margin: 0.2em;
+  padding: 1em;
+  border-left: solid;
+  border-width: 0.5em;
+  border-color: LightBlue;
+  background-color: #D8FFFD;
+}
+
+.answerBar {
+  margin: 2em;
 }

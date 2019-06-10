@@ -67,10 +67,9 @@ router.get('/:id', async (request, response, next) => {
 
 router.get('/:package/:word', async (request, response, next) => {
     try {
-        const package = await Package.findById(request.params.id)
-        const word = package.words.find(w => w.word === request.params.word)
-        response.json(word)
-
+        const package = await Package.findById(request.params.package)
+        const word = package.words.find(w => w.id === request.params.word)
+        response.status(200).json(word)
     } catch ( exception ) {
         next(exception)
     }

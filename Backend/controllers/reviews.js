@@ -15,6 +15,7 @@ router.get('/:package', async (request, response, next) => {
             response.status(404).json({ error: 'no such package' })
 
         const review = package.words.filter(word => {
+
             //if this word has not been reviewed before, it can be reviewed
             if(!word.reviews || word.reviews.length === 0)
                 return true
@@ -77,18 +78,19 @@ router.put('/:package/:word', async (request, response, next) => {
 
             //push the new review data to user version of word data
             word.reviews.push(review)
+
+            response.status(200).json(review)
         }
 
         if(synonym){
             console.log(`SYNONYM word:${word} package:${package} synonym:${synonym}`)
             word.synonyms.push(synonym)
+            response.status(200)
         }
 
         package.words = package.words.map(w => w.id === request.params.word ? word : w)
         user.packages = user.packages.map(p => p.id === request.params.package ? package : p)
-
-        const saved = await user.save()
-        response.json(saved)
+        await user.save()
 
     } catch (exception) {
         next(exception)

@@ -3,7 +3,7 @@ import UserPackage from '../components/UserPackage'
 import packageService from '../services/packages'
 import '../loader.css'
 
-const Home = ({user}) => {
+const Home = ({user, reviewHandler}) => {
   const [packages, setPackages] = useState(null)
 
   useEffect(() => {
@@ -37,7 +37,7 @@ const Home = ({user}) => {
     <div>
       <h2>My Packages</h2>
       { packages.length === 0 ? <div><p>No packages yet. :(</p> <p>Search for packages and subscribe to them.</p></div>
-        : packages.map(p => <UserPackage key={p._id} content={p} remove={removePackage} />)}
+        : packages.map(p => <UserPackage key={p._id} content={p} remove={removePackage} reviewHandler={reviewHandler} />)}
     </div>
   )
 }

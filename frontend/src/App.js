@@ -11,6 +11,7 @@ import './styles.css'
 
 const App = () => {
   const [user, setUser] = useState(null)
+  const [reviews, setReviews] = useState(null)
 
   useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('translatorUser')
@@ -34,6 +35,10 @@ const App = () => {
     }
   }
 
+  const handleReviews = async (reviews) => {
+    setReviews(reviews)
+  }
+
   return (
     <div>
       <BrowserRouter>
@@ -46,14 +51,14 @@ const App = () => {
             }
             <div className='linkback'><Link className='link' to="/packages">Search for Packages</Link></div>
           </div>
-
-          <Route exact path="/" render={() => <Home user={user}/>} />
+          <Route exact path="/" render={() => <Home user={user} reviewHandler={handleReviews}/>} />
           <Route exact path="/sign" render={() => user ? <Redirect to="/" /> : <Sign handleLogin={handleLogin}/>} />
           <Route exact path="/packages" render={() => <Packages user={user}/>} />
           <Route exact path="/packages/:id" render={({ match }) => <p>{match.params.id}</p>} />
           <Route exact path="/users" render={() => <p>uusers </p>} />
           <Route exact path="/users/:name" render={({ match }) => <p>{match.params.name}</p>} />
-          <Route exact path="/review" render={() => !user ? <Redirect to="/" /> : <Review />} />
+          <Route exact path="/review" render={() => !user ? <Redirect to="/" />
+          : <Review reviews={reviews} reviewHandler={handleReviews}/>} />
         </div>
       </BrowserRouter>
     </div>
