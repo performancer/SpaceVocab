@@ -1,12 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import { BrowserRouter, Route, Link, Redirect, withRouter } from 'react-router-dom'
-
 import Home from './pages/Home'
 import Packages from './pages/Packages'
+import Sign from './pages/Sign'
+import Review from './pages/Review'
 
 import LoginForm from './components/LoginForm'
-import loginService from './services/login'
 import token from './utils/token'
+import './styles.css'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -33,24 +34,26 @@ const App = () => {
     }
   }
 
-  const padding = { padding: 5 }
-
   return (
     <div>
       <BrowserRouter>
         <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
         <div>
-          <div>
-            <Link style={padding} to="/">home</Link>
-            <Link style={padding} to="/packages">packages</Link>
-            <Link style={padding} to="/users">users</Link>
+          <div className='linkcase'>
+            {user ?
+              <div className='linkback'><Link className='link' to="/">My Packages</Link></div>
+              : null
+            }
+            <div className='linkback'><Link className='link' to="/packages">Search for Packages</Link></div>
           </div>
+
           <Route exact path="/" render={() => <Home user={user}/>} />
-          <Route exact path="/sign" render={() => <p>sign up</p>} />
+          <Route exact path="/sign" render={() => user ? <Redirect to="/" /> : <Sign handleLogin={handleLogin}/>} />
           <Route exact path="/packages" render={() => <Packages user={user}/>} />
           <Route exact path="/packages/:id" render={({ match }) => <p>{match.params.id}</p>} />
           <Route exact path="/users" render={() => <p>uusers </p>} />
           <Route exact path="/users/:name" render={({ match }) => <p>{match.params.name}</p>} />
+          <Route exact path="/review" render={() => !user ? <Redirect to="/" /> : <Review />} />
         </div>
       </BrowserRouter>
     </div>

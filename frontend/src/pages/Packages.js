@@ -1,15 +1,12 @@
 import React, { useState, useEffect }  from 'react';
-
-import LoginForm from '../components/LoginForm'
-import Togglable from '../components/Togglable'
 import PackageInfo from '../components/PackageInfo'
-import UserPackage from '../components/UserPackage'
 
 import packageService from '../services/packages'
+import '../loader.css'
 
 const Packages = ({user}) => {
-  const [packages, setPackages] = useState([])
-  const [myPackages, setMyPackages] = useState([])
+  const [packages, setPackages] = useState(null)
+  const [myPackages, setMyPackages] = useState(null)
 
   useEffect(() => {
     packageService.getPublic().then(packages => setPackages( packages ))
@@ -39,7 +36,7 @@ const Packages = ({user}) => {
   }
 
   const removePackage = async (id) => {
-    const pack = myPackages.find(p => p.source === id)
+    const pack = myPackages.find(p => p.source._id === id)
 
     if(pack) {
       if(!user) {
@@ -58,6 +55,10 @@ const Packages = ({user}) => {
     }
   }
 
+  if(!packages || !myPackages){
+    return <div className='loader' />
+  }
+
   return (
     <div>
       <h2>Public Packages</h2>
@@ -65,7 +66,7 @@ const Packages = ({user}) => {
         <PackageInfo
           key={p._id}
           user={user}
-          subscribed={myPackages.find(m => m.source === p._id) ? true : false}
+          subscribed={myPackages.find(m => m.source._id === p._id) ? true : false}
           content={p}
           handleAdd={addPackage}
           handleRemove={removePackage}

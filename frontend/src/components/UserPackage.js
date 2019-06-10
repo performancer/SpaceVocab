@@ -1,29 +1,53 @@
 import React, {useState, useEffect} from 'react'
+import { withRouter } from 'react-router-dom'
 import reviewService from '../services/reviews'
+import '../styles.css'
 
-const UserPackage = ({content, remove}) => {
-
-  const [reviews, setReviews] = useState([])
+const UserPackage = (props) => {
+  const {content, remove} = props
+  const [reviews, setReviews] = useState(null)
 
   useEffect(() => {
     reviewService.get(content._id).then(reviews => setReviews(reviews))
-  }, [content._id])
+  }, [content.source, content._id])
 
-  const style = {
-    borderStyle: 'solid',
-    borderColor: 'gray',
-    borderRadius: '5px',
-    padding: '5px'
+  const startReview = () => {
+    console.log('start reviews')
+    props.history.push('/review')
+  }
+
+  const info = () => {
+    return (
+      <div>
+        <h4>{content.source.name}</h4>
+        <button onClick={() => remove(content._id)}>unsubsribe</button>
+        <button>like</button>
+      </div>
+    )
+  }
+
+  const status = () => {
+    if(!reviews)
+      return <p>Gathering information, please wait...</p>
+
+    return (
+      <div>
+        <p>reviews available: <b>{reviews.length}</b></p>
+        {reviews.length > 0 ?
+          <button onClick={startReview}>review now</button> :
+          <p>Cannot review right now, try again later.</p>
+        }
+      </div>
+    )
   }
 
   return (
-    <div style={style} >
-      <h4>{content._id}</h4>
-      <button onClick={() => remove(content._id)}>unsubsribe</button>
-      <button>like</button>
-      <p>reviews: {reviews.length}</p>
+    <div className='package' >
+      {info()}
+      {status()}
     </div>
   )
 }
 
-export default UserPackage
+const UserPackageHistory = withRouter(UserPackage)
+export default UserPackageHistory

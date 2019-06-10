@@ -71,8 +71,8 @@ const LoginForm = (props) => {
     return(
       <div className='banner'>
         <p>
-          Logged in as {user.username}
-          <button onClick={handleLogout}>Log out</button>
+          Logged in as <b>{user.username}</b>
+          <button className='right' onClick={handleLogout}>Log out</button>
         </p>
       </div>
     )
@@ -99,5 +99,4 @@ const LoginForm = (props) => {
 LoginForm.propTypes = {handleLogin: PropTypes.func.isRequired}
 
 const Login = withRouter(LoginForm)
-
 export default Login

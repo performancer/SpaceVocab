@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
 const User = require('../models/user')
+const helper = require('../utils/helper')
 
 router.get('/', async (request, response, next) => {
     try {
@@ -17,7 +18,7 @@ router.post('/', async (request, response, next) => {
     try {
         //TODO: email
 
-        const { username, password } = request.body
+        const { username, password, language } = request.body
 
         if (!password || password.length < 3 ) {
             return response.status(400).send({
@@ -28,14 +29,16 @@ router.post('/', async (request, response, next) => {
         const saltRounds = 10
         const passwordHash = await bcrypt.hash(password, saltRounds)
 
-        const user = new User({
+        const userData = new User({
             username,
             passwordHash,
+            language
         })
 
-        const savedUser = await user.save()
-        response.json(savedUser)
+        const user = await userData.save()
+        const token = helper.getToken(user)
 
+        response.status(200).send({ token, username: user.username })
     } catch (exception) {
         next(exception)
     }

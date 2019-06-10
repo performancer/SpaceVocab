@@ -10,7 +10,16 @@ const getUser = async (token) => {
     if (!decodedToken.id)
         return null
 
-    return await User.findById(decodedToken.id)
+    return await User.findById(decodedToken.id).populate('packages.source', { name: 1 })
 }
 
-module.exports = { getUser }
+const getToken = (user) => {
+    const userForToken = {
+        username: user.username,
+        id: user.id,
+    }
+
+    return jwt.sign(userForToken, process.env.SECRET)
+}
+
+module.exports = { getUser, getToken }

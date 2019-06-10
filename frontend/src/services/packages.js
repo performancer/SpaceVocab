@@ -8,6 +8,7 @@ const getPublic = () => {
   return request.then(response => response.data)
 }
 
+
 const getMine = () => {
   const config = {
     headers: { Authorization: token.getToken() },
@@ -28,6 +29,11 @@ const addPackage = async (id) => {
   return response.data
 }
 
+const getPackage = async (id) => {
+  const request = axios.get(`${commonUrl}/${id}`)
+  return request.data
+}
+
 const removePackage = async (id) => {
   const config = {
     headers: { Authorization: token.getToken() },
@@ -38,4 +44,4 @@ const removePackage = async (id) => {
 }
 
 
-export default { getPublic, getMine, addPackage, removePackage }
+export default { getPublic, getMine, addPackage, getPackage, removePackage }
