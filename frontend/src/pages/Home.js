@@ -1,7 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import UserPackage from '../components/UserPackage'
 import packageService from '../services/packages'
-import '../loader.css'
+import '../styles/loader.css'
 
 const Home = ({user, reviewHandler}) => {
   const [packages, setPackages] = useState(null)

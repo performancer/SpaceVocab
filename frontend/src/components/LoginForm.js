@@ -5,9 +5,6 @@ import { useField } from '../hooks'
 
 import loginService from '../services/login'
 
-import '../styles.css'
-import '../modal.css'
-
 const LoginForm = (props) => {
   const {user, handleLogin, handleLogout} = props
   const [visible, setVisible] = useState(false)
@@ -60,7 +57,13 @@ const LoginForm = (props) => {
             <p><button type="submit">Login</button></p>
           </form>
           <div className="modal-footer">
-            <p>Do not have an account? <button onClick={() => signup()}>Sign up</button> now!</p>
+            <p>
+              Do not have an account?
+              <button className='simpleButton' onClick={() => signup()}>
+                Sign up
+              </button>
+              now!
+            </p>
           </div>
         </div>
       </div>
@@ -69,28 +72,33 @@ const LoginForm = (props) => {
 
   const renderUser = () => {
     return(
-      <div className='banner'>
-        <p>
-          Logged in as <b>{user.username}</b>
-          <button className='right' onClick={handleLogout}>Log out</button>
-        </p>
+      <div>
+        <span className='left'><b class="fa fa-user"> {user.username}</b></span>
+        <button className='right' onClick={handleLogout}>log out</button>
       </div>
     )
   }
 
   const renderLogin = () => {
     return (
-      <div className='banner'>
-        <p>
-          You are not logged in. <button onClick={() => setVisible(true)}>Login</button> or <button onClick={() => signup()}>Sign up</button>
-        </p>
-      </div>
+      <p>
+        You are not logged in.
+        <button className='simpleButton' onClick={() => setVisible(true)}>
+          Login
+        </button>
+        or
+        <button className='simpleButton' onClick={() => signup()}>
+          Sign up
+        </button>
+      </p>
     )
   }
 
   return (
     <div>
-      { user ? renderUser() : renderLogin() }
+      <div className='login'>
+        { user ? renderUser() : renderLogin() }
+      </div>
       { (!user && visible) ? renderModal() : "" }
     </div>
   )

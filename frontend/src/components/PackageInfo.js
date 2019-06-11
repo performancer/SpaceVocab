@@ -1,18 +1,23 @@
 import React from 'react'
 import Togglable from './Togglable'
-import '../styles.css'
 
 const PackageInfo = ({user, subscribed, content, handleAdd, handleRemove}) => {
-  
+
   const buttons = () => {
     if(user) {
       return (
         <div>
           { subscribed ?
-            <button onClick={ () => handleRemove(content._id)}>unsubscribe</button> :
-            <button onClick={ () => handleAdd(content._id)}>subscribe</button>
+            <button className='borderlessButtonDark' onClick={ () => handleRemove(content._id)}>unsubscribe</button> :
+            <button className='borderlessButtonDark' onClick={ () => handleAdd(content._id)}>subscribe</button>
           }
-          <button>like</button>
+
+          <button className='borderlessButton'>
+            <span className='gray'><span className='fa fa-thumbs-up' /></span>
+          </button>
+          <button className='borderlessButton'>
+            <span className='gray'><span className='fa fa-thumbs-down' /></span>
+          </button>
         </div>
       )
     }

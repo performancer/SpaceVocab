@@ -1,10 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import { withRouter } from 'react-router-dom'
 import { useField } from '../hooks'
-
 import userService from '../services/users'
-
-import '../styles.css'
 
 const Sign = (props) => {
   const {handleLogin} = props
@@ -40,8 +37,7 @@ const Sign = (props) => {
   }
 
   return (
-    <div className='center'>
-      <form onSubmit={submit}>
+      <form className='center' onSubmit={submit}>
         <p className='error'>{error}</p>
         <p><b>Username</b><br />
         <input type="text" {...username.collection}/></p>
@@ -50,7 +46,6 @@ const Sign = (props) => {
         <p><input type="password" {...repeatPassword.collection}/></p>
         <p><button type="submit">Sign up</button></p>
       </form>
-    </div>
   )
 }
 

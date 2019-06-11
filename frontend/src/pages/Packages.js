@@ -2,7 +2,7 @@ import React, { useState, useEffect }  from 'react';
 import PackageInfo from '../components/PackageInfo'
 
 import packageService from '../services/packages'
-import '../loader.css'
+import '../styles/loader.css'
 
 const Packages = ({user}) => {
   const [packages, setPackages] = useState(null)

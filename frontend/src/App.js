@@ -6,8 +6,14 @@ import Sign from './pages/Sign'
 import Review from './pages/Review'
 
 import LoginForm from './components/LoginForm'
+import Togglable from './components/Togglable'
+
 import token from './utils/token'
-import './styles.css'
+import './styles/basic.css'
+import './styles/header.css'
+import './styles/packages.css'
+import './styles/modal.css'
+import './styles/loader.css'
 
 const App = () => {
   const [user, setUser] = useState(null)
@@ -39,18 +45,31 @@ const App = () => {
     setReviews(reviews)
   }
 
+  const navRef = React.createRef()
+
   return (
     <div>
       <BrowserRouter>
-        <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
-        <div>
-          <div className='linkcase'>
-            {user ?
-              <div className='linkback'><Link className='link' to="/">My Packages</Link></div>
-              : null
-            }
-            <div className='linkback'><Link className='link' to="/packages">Search for Packages</Link></div>
+        <header>
+          <div className='flexContainer'>
+            <div className='menuButton'>
+              <button className='left' onClick={() => navRef.current.toggleVisibility()}>
+                <span className="fa fa-bars"></span>
+              </button>
+            </div>
+            <div className='menuButton'>
+              <button className='right'><span className="fa fa-gear"></span></button>
+            </div>
           </div>
+          <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
+        </header>
+        <div>
+          <Togglable ref={navRef}>
+            <div className='centered'>
+              {user ? <Link className='link' to="/">My Packages</Link> : null }
+              <Link className='link' to="/packages">Search for Packages</Link>
+            </div>
+          </Togglable>
           <Route exact path="/" render={() => <Home user={user} reviewHandler={handleReviews}/>} />
           <Route exact path="/sign" render={() => user ? <Redirect to="/" /> : <Sign handleLogin={handleLogin}/>} />
           <Route exact path="/packages" render={() => <Packages user={user}/>} />

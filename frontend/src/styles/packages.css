@@ -1,0 +1,53 @@
+.package {
+  border: solid;
+  border-color: gray;
+  border-radius: 5px;
+  padding: 5px;
+}
+
+.word {
+  background-color: LightBlue;
+  margin: 5px;
+}
+
+.details {
+  margin: 0.2em;
+  padding: 1em;
+  border-left: solid;
+  border-width: 0.5em;
+  border-color: LightBlue;
+  background-color: #D8FFFD;
+}
+
+.answerBar {
+  margin: 2em;
+}
+
+.borderlessButton {
+  font-size: 20px;
+  font-weight: bold;
+
+  padding: 0.2em 0.8em;
+  margin: 0;
+  background:none;
+  background-color: #DDF;
+  border: solid;
+  border-radius: 5px;
+  border-color: white;
+  cursor: pointer;
+}
+
+.borderlessButtonDark {
+  color: white;
+  font-size: 20px;
+  font-weight: bold;
+
+  padding: 0.2em 0.5em;
+  margin: 0;
+  background:none;
+  background-color: #335;
+  border: solid;
+  border-radius: 5px;
+  border-color: white;
+  cursor: pointer;
+}

@@ -2,8 +2,8 @@ import React, { useState, useEffect }  from 'react'
 import { useField } from '../hooks'
 import packageService from '../services/packages'
 import reviewService from '../services/reviews'
-import '../styles.css'
-import '../loader.css'
+import '../styles/basic.css'
+import '../styles/loader.css'
 
 const Review = ({reviews, reviewHandler}) => {
   const [notification, setNotification] = useState(null)
@@ -86,11 +86,11 @@ const Review = ({reviews, reviewHandler}) => {
     <div>
       <div style={style}>
         <p><b>Review:</b> {reviews.source.name}</p>
-        <div className='linkcase'>
+        <div className='centered'>
           <h2>{word.word}</h2>
         </div>
       </div>
-      <div className='linkcase'>
+      <div className='centered'>
         <div className='answerBar'>
           {notification ? <b className={notification.type}>{notification.note}</b> : null }
           { details ?
