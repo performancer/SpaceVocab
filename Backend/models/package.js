@@ -23,6 +23,13 @@ const packageSchema = mongoose.Schema({
             translation: String,
             synonyms: [ String ]
         }]
+    }],
+    likes: [{
+        user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+        },
+        value: Number
     }]
 })
 

@@ -16,6 +16,12 @@
   float: right;
 }
 
+.small {
+  font-size: small;
+  margin: auto;
+  padding: 0.5em;
+}
+
 body {
   margin: 0;
 }

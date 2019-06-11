@@ -2,8 +2,6 @@ import React, { useState, useEffect }  from 'react'
 import { useField } from '../hooks'
 import packageService from '../services/packages'
 import reviewService from '../services/reviews'
-import '../styles/basic.css'
-import '../styles/loader.css'
 
 const Review = ({reviews, reviewHandler}) => {
   const [notification, setNotification] = useState(null)
@@ -96,12 +94,16 @@ const Review = ({reviews, reviewHandler}) => {
           { details ?
             <div>
               <input type='text' {...answer.collection} disabled/>
-              <button onClick={displayNext}>{'>'}</button>
+              <button onClick={displayNext}>
+                <span className='fa fa-caret-right' />
+            </button>
             </div>
             :
             <div>
               <input type='text' {...answer.collection} />
-              <button onClick={respond}>{'>'}</button>
+              <button onClick={respond}>
+                <span className='fa fa-caret-right' />
+            </button>
             </div>
           }
         </div>

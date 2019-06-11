@@ -1,8 +1,6 @@
 import React, { useState, useEffect }  from 'react';
 import PackageInfo from '../components/PackageInfo'
-
 import packageService from '../services/packages'
-import '../styles/loader.css'
 
 const Packages = ({user}) => {
   const [packages, setPackages] = useState(null)
@@ -24,7 +22,7 @@ const Packages = ({user}) => {
         return;
       }
 
-      if( myPackages.find(mp => mp.source === id) ){
+      if( myPackages.find(mp => mp.source._id === id || mp.source === id) ){
         console.log("you have already subscribed to this package")
         return;
       }
@@ -36,7 +34,7 @@ const Packages = ({user}) => {
   }
 
   const removePackage = async (id) => {
-    const pack = myPackages.find(p => p.source._id === id)
+    const pack = myPackages.find(p => p.source === id || p.source._id === id)
 
     if(pack) {
       if(!user) {
@@ -66,7 +64,7 @@ const Packages = ({user}) => {
         <PackageInfo
           key={p._id}
           user={user}
-          subscribed={myPackages.find(m => m.source._id === p._id) ? true : false}
+          subscribed={myPackages.find(m => m.source === p._id || m.source._id === p._id) ? true : false}
           content={p}
           handleAdd={addPackage}
           handleRemove={removePackage}

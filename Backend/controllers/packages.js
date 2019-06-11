@@ -1,4 +1,5 @@
 const router = require('express').Router()
+const helper = require('../utils/helper')
 const Package = require('../models/package')
 
 /*
@@ -49,7 +50,7 @@ const package3 =
 
 router.get('/', async (request, response, next) => {
     try {
-        const packages = await Package.find({})
+        const packages = await Package.find({}).populate('likes.user', { name: 1 })
         response.json(packages)
     } catch ( exception ) {
         next(exception)
@@ -63,6 +64,44 @@ router.get('/:id', async (request, response, next) => {
     } catch ( exception ) {
         next(exception)
     }
+})
+
+router.put('/:id', async (request, response, next) => {
+    try {
+
+        const user = await helper.getUser(request.token)
+
+        if (!user)
+            return response.status(401).json({ error: 'token missing or invalid' })
+
+        const package = await Package.findById(request.params.id)
+        const value = request.body.value
+
+        if(value > 1 || value < -1)
+            return response.status(401)
+
+        const body = {
+            user: user.id,
+            value: value
+        }
+
+        if(!package.likes) {
+            package.likes = []
+        } else {
+            package.likes = package.likes.filter(l => !l.user.equals(user.id))
+        }
+
+        if(value !== 0) {
+            package.likes.push(body)
+        }
+
+        package.save()
+        response.json(package)
+
+    } catch ( exception ) {
+        next(exception)
+    }
+
 })
 
 router.get('/:package/:word', async (request, response, next) => {

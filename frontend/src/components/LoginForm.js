@@ -73,7 +73,7 @@ const LoginForm = (props) => {
   const renderUser = () => {
     return(
       <div>
-        <span className='left'><b class="fa fa-user"> {user.username}</b></span>
+        <span className='left'><b className="fa fa-user"> {user.username}</b></span>
         <button className='right' onClick={handleLogout}>log out</button>
       </div>
     )
