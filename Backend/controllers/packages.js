@@ -59,8 +59,12 @@ router.get('/', async (request, response, next) => {
 
 router.get('/:id', async (request, response, next) => {
     try {
-        const package = await Package.findById(request.params.id)
-        response.json(package)
+        console.log(request.token)
+        const user = await helper.getUser(request.token)
+        const package = await Package.findById(request.params.id).populate('likes.user', { name: 1 })
+        const subscribed = user.packages.find(p => p.source.equals(package.id)) ? true : false
+
+        response.json({ ...package, subscribed: subscribed })
     } catch ( exception ) {
         next(exception)
     }

@@ -29,7 +29,13 @@ const addPackage = async (id) => {
 }
 
 const getPackage = async (id) => {
-  const response = await axios.get(`${commonUrl}/${id}`)
+  const config = {
+    headers: { Authorization: token.getToken() },
+  }
+
+  console.log(config)
+
+  const response = await axios.get(`${commonUrl}/${id}`, config)
   return response.data
 }
 
@@ -37,7 +43,6 @@ const ratePackage = async(id, value) => {
   const config = {
     headers: { Authorization: token.getToken() },
   }
-
   const body = { value: value }
 
   const response = await axios.put(`${commonUrl}/${id}`, body, config)
@@ -64,7 +69,7 @@ export default {
   getMine,
   addPackage,
   getPackage,
-  ratePackage, 
+  ratePackage,
   removePackage,
   getWord
 }
