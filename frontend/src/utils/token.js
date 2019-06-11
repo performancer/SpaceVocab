@@ -1,11 +1,11 @@
-let token = null
+import store from '../store'
+
+const exists = () => {
+  return store.getState() && store.getState().user
+}
 
 const getToken = () => {
-  return token
+  return `bearer ${store.getState().user.token}`
 }
 
-const setToken = (newToken) => {
-  token = `bearer ${newToken}`
-}
-
-export default { getToken, setToken }
+export default { getToken, exists }

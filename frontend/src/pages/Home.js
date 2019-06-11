@@ -1,42 +1,37 @@
 import React, { useState, useEffect }  from 'react';
 import UserPackage from '../components/UserPackage'
-import packageService from '../services/packages'
+import subscriptionService from '../services/subscriptions'
+import token from '../utils/token'
 
-const Home = ({user, reviewHandler}) => {
-  const [packages, setPackages] = useState(null)
+const Home = ({reviewHandler}) => {
+  const [subscriptions, setSubscriptions] = useState(null)
 
   useEffect(() => {
-    if(user) {
-      packageService.getMine().then(packages => setPackages( packages ))
-    } else {
-      setPackages(null)
+    if(token.exists()) {
+      subscriptionService.get().then(s => setSubscriptions(s))
     }
-  }, [user])
+  }, [])
 
-  const removePackage = async (id) => {
-      try {
-        console.log(`removing package ${id}`)
-        await packageService.removePackage(id)
-        setPackages(packages.filter(p => p._id !== id))
-        console.log('package removed')
-      } catch (exception) {
-        console.log(exception)
-      }
-  }
-
-  if(!user) {
+  if(!token.exists()) {
     return <div>You need to log in to view your packages</div>
   }
 
-  if(!packages){
+  if(!subscriptions){
     return <div className='loader' />
   }
 
   return (
     <div>
-      <h2>My Packages</h2>
-      { packages.length === 0 ? <div><p>No packages yet. :(</p> <p>Search for packages and subscribe to them.</p></div>
-        : packages.map(p => <UserPackage key={p._id} content={p} remove={removePackage} reviewHandler={reviewHandler} />)}
+      <h2>My Subscriptions</h2>
+      { subscriptions.length === 0 ?
+        <div>
+          <p>No subscriptions yet. :(</p>
+          <p>Please search for packages and subscribe to them.</p>
+        </div>
+        : subscriptions.map(p =>
+          <UserPackage key={p._id} content={p} reviewHandler={reviewHandler}/>
+        )
+      }
     </div>
   )
 }

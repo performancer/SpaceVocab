@@ -1,25 +1,24 @@
 import React, {useState} from 'react'
 import { withRouter } from 'react-router-dom'
-import PropTypes from 'prop-types'
 import { useField } from '../hooks'
-
+import store from '../store'
 import loginService from '../services/login'
+import helper from '../utils/helper'
 
 const LoginForm = (props) => {
-  const {user, handleLogin, handleLogout} = props
   const [visible, setVisible] = useState(false)
   const [error, setError] = useState("")
-
-  const signup = () => {
-    setVisible(false)
-    setError("")
-    props.history.push('/sign')
-  }
 
   const username = useField('username')
   const password = useField('password')
 
-  const submit = async (event) => {
+  const register = () => {
+    setVisible(false)
+    setError("")
+    props.history.push('/register')
+  }
+
+  const login = async (event) => {
      event.preventDefault()
      const credentials = {
         username: username.value,
@@ -32,7 +31,7 @@ const LoginForm = (props) => {
       try {
         console.log("logging in...")
         const user = await loginService.login(credentials)
-        handleLogin(user)
+        helper.login(user)
         console.log("logged in successfully")
         setVisible(false)
       } catch (exception) {
@@ -45,10 +44,12 @@ const LoginForm = (props) => {
       <div className="modal">
         <div className="modal-content">
           <div className="modal-header">
-            <span className="close" onClick={() => {setError(false); setVisible(false)}}>&times;</span>
+            <span className="close" onClick={
+                () => {setError(false); setVisible(false)}
+              }>&times;</span>
             <h2>Log In</h2>
           </div>
-          <form className="modal-body" onSubmit={submit}>
+          <form className="modal-body" onSubmit={login}>
             <p className='error'>{error}</p>
             <p><b>Username</b><br />
             <input type="text" {...username.collection}/></p>
@@ -59,7 +60,7 @@ const LoginForm = (props) => {
           <div className="modal-footer">
             <p>
               Do not have an account?
-              <button className='simpleButton' onClick={() => signup()}>
+              <button className='simpleButton' onClick={register}>
                 Sign up
               </button>
               now!
@@ -73,8 +74,10 @@ const LoginForm = (props) => {
   const renderUser = () => {
     return(
       <div>
-        <span className='left'><b className="fa fa-user"> {user.username}</b></span>
-        <button className='right' onClick={handleLogout}>log out</button>
+        <span className='left'><b className="fa fa-user"> {' '}
+          {store.getState().user.username}</b>
+        </span>
+        <button className='right' onClick={helper.logout}>Logout</button>
       </div>
     )
   }
@@ -87,7 +90,7 @@ const LoginForm = (props) => {
           Login
         </button>
         or
-        <button className='simpleButton' onClick={() => signup()}>
+        <button className='simpleButton' onClick={register}>
           Sign up
         </button>
       </p>
@@ -97,14 +100,12 @@ const LoginForm = (props) => {
   return (
     <div>
       <div className='login'>
-        { user ? renderUser() : renderLogin() }
+        { store.getState().user ? renderUser() : renderLogin() }
       </div>
-      { (!user && visible) ? renderModal() : "" }
+      { (!store.getState().user && visible) ? renderModal() : null }
     </div>
   )
 }
-
-LoginForm.propTypes = {handleLogin: PropTypes.func.isRequired}
 
 const Login = withRouter(LoginForm)
 export default Login

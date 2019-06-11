@@ -1,23 +1,25 @@
 import React, { useState, useEffect }  from 'react';
-import PackageInfo from '../components/PackageInfo'
+import store from '../store'
+import PackageEntry from '../components/PackageEntry'
 import packageService from '../services/packages'
+import subscriptionService from '../services/subscriptions'
 
-const Packages = ({user}) => {
+const PackageSearch = () => {
   const [packages, setPackages] = useState(null)
   const [myPackages, setMyPackages] = useState(null)
 
   useEffect(() => {
-    packageService.getPublic().then(packages => setPackages( packages ))
+    packageService.get().then(packages => setPackages( packages ))
 
-    if(user) {
-      packageService.getMine().then(packages => setMyPackages( packages ))
+    if(store.getState().user) {
+      subscriptionService.get().then(packages => setMyPackages( packages ))
     } else {
       setMyPackages([])
     }
-  }, [user])
+  }, [])
 
   const addPackage = async (id) => {
-      if(!user) {
+      if(!store.getState().user) {
         console.log("you are not logged in")
         return;
       }
@@ -37,7 +39,7 @@ const Packages = ({user}) => {
     const pack = myPackages.find(p => p.source === id || p.source._id === id)
 
     if(pack) {
-      if(!user) {
+      if(!store.getState().user) {
         console.log("you are not logged in")
         return;
       }
@@ -61,9 +63,8 @@ const Packages = ({user}) => {
     <div>
       <h2>Public Packages</h2>
       {packages.map(p =>
-        <PackageInfo
+        <PackageEntry
           key={p._id}
-          user={user}
           subscribed={myPackages.find(m => m.source === p._id || m.source._id === p._id) ? true : false}
           content={p}
           handleAdd={addPackage}
@@ -74,4 +75,4 @@ const Packages = ({user}) => {
   )
 }
 
-export default Packages;
+export default PackageSearch

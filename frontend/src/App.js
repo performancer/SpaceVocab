@@ -1,14 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import { BrowserRouter, Route, Link, Redirect, withRouter } from 'react-router-dom'
-import Home from './pages/Home'
-import Packages from './pages/Packages'
-import Sign from './pages/Sign'
-import Review from './pages/Review'
+import store from './store'
+
+import HomePage from './pages/Home'
+import PackageInfoPage from './pages/PackageInfo'
+import PackageSearchPage from './pages/PackageSearch'
+import RegisterPage from './pages/Register'
+import ReviewPage from './pages/Review'
 
 import LoginForm from './components/LoginForm'
 import Togglable from './components/Togglable'
 
-import token from './utils/token'
 import './styles/basic.css'
 import './styles/header.css'
 import './styles/packages.css'
@@ -16,30 +18,20 @@ import './styles/modal.css'
 import './styles/loader.css'
 
 const App = () => {
-  const [user, setUser] = useState(null)
   const [reviews, setReviews] = useState(null)
 
   useEffect(() => {
-    const loggedUserJSON = window.localStorage.getItem('translatorUser')
-    if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      token.setToken(user.token)
-    }
+    let user = null
+    const userJSON = window.localStorage.getItem('translatorUser')
+
+    if (userJSON)
+      user = JSON.parse(userJSON)
+
+    store.dispatch({ type: 'USER', data: { user: user}})
   }, [])
 
-  const handleLogin = (user) => {
-      window.localStorage.setItem('translatorUser', JSON.stringify(user))
-      setUser(user)
-      token.setToken(user.token)
-  }
-
-  const handleLogout = async (event) => {
-    if( window.confirm('are you sure you want to log out?')) {
-      window.localStorage.removeItem('translatorUser')
-      setUser(null)
-    }
-  }
+  if(!store.getState())
+    return <div className='loader' />
 
   const handleReviews = async (reviews) => {
     setReviews(reviews)
@@ -61,23 +53,23 @@ const App = () => {
               <button className='right'><span className="fa fa-gear"></span></button>
             </div>
           </div>
-          <LoginForm user={user} handleLogin={handleLogin} handleLogout={handleLogout}/>
+          <LoginForm />
         </header>
         <div>
           <Togglable ref={navRef}>
             <div className='centered'>
-              {user ? <Link className='link' to="/">My Packages</Link> : null }
+              {store.getState().user ? <Link className='link' to="/">My Subscriptions</Link> : null }
               <Link className='link' to="/packages">Search for Packages</Link>
             </div>
           </Togglable>
-          <Route exact path="/" render={() => <Home user={user} reviewHandler={handleReviews}/>} />
-          <Route exact path="/sign" render={() => user ? <Redirect to="/" /> : <Sign handleLogin={handleLogin}/>} />
-          <Route exact path="/packages" render={() => <Packages user={user}/>} />
-          <Route exact path="/packages/:id" render={({ match }) => <p>{match.params.id}</p>} />
-          <Route exact path="/users" render={() => <p>uusers </p>} />
+          <Route exact path="/" render={() => <HomePage reviewHandler={handleReviews}/>} />
+          <Route exact path="/register" render={() => store.getState().user ? <Redirect to="/" /> : <RegisterPage />} />
+          <Route exact path="/packages" render={() => <PackageSearchPage />} />
+          <Route exact path="/packages/:id" render={({ match }) => <PackageInfoPage id={match.params.id} />} />
+          <Route exact path="/users" render={() => <p>users</p>} />
           <Route exact path="/users/:name" render={({ match }) => <p>{match.params.name}</p>} />
-          <Route exact path="/review" render={() => !user ? <Redirect to="/" />
-          : <Review reviews={reviews} reviewHandler={handleReviews}/>} />
+          <Route exact path="/review" render={() => !store.getState().user ? <Redirect to="/" />
+          : <ReviewPage reviews={reviews} reviewHandler={handleReviews}/>} />
         </div>
       </BrowserRouter>
     </div>

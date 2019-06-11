@@ -1,17 +1,17 @@
-import React, { useState, useEffect }  from 'react';
+import React, { useState }  from 'react';
 import { withRouter } from 'react-router-dom'
 import { useField } from '../hooks'
 import userService from '../services/users'
+import helper from '../utils/helper'
 
-const Sign = (props) => {
-  const {handleLogin} = props
+const Register = (props) => {
   const [error, setError] = useState("")
 
   const username = useField('username')
   const password = useField('password')
   const repeatPassword = useField('password')
 
-  const submit = async (event) => {
+  const register = async (event) => {
      event.preventDefault()
      const data = {
         username: username.value,
@@ -28,7 +28,7 @@ const Sign = (props) => {
       try {
         console.log("signing up...")
         const user = await userService.signup(data)
-        handleLogin(user)
+        helper.login(user)
         console.log("sign up successful")
         props.history.push('/')
       } catch (exception) {
@@ -37,7 +37,7 @@ const Sign = (props) => {
   }
 
   return (
-      <form className='center' onSubmit={submit}>
+      <form className='center' onSubmit={register}>
         <p className='error'>{error}</p>
         <p><b>Username</b><br />
         <input type="text" {...username.collection}/></p>
@@ -49,5 +49,5 @@ const Sign = (props) => {
   )
 }
 
-const SignWithHistory = withRouter(Sign)
-export default SignWithHistory
+const RegisterComponent = withRouter(Register)
+export default RegisterComponent

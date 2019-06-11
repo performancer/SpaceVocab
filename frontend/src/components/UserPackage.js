@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import reviewService from '../services/reviews'
 
 const UserPackage = (props) => {
-  const {content, remove, reviewHandler} = props
+  const {content, reviewHandler} = props
   const [reviews, setReviews] = useState(null)
 
   useEffect(() => {
@@ -16,12 +16,15 @@ const UserPackage = (props) => {
     props.history.push('/review')
   }
 
+  const details = () => {
+    props.history.push(`/packages/${content.source._id}`)
+  }
+
   const info = () => {
     return (
-      <div>
-        <h4>{content.source.name}</h4>
-        <button onClick={() => remove(content._id)}>unsubsribe</button>
-        <button>like</button>
+      <div className='flexContainer'>
+        <div className='flexItem'><h3>{content.source.name}</h3></div>
+        <div><button onClick={details}>View Page</button></div>
       </div>
     )
   }
@@ -31,11 +34,17 @@ const UserPackage = (props) => {
       return <p>Gathering information, please wait...</p>
 
     return (
-      <div>
-        <p>reviews available: <b>{reviews.length}</b></p>
+      <div className='flexContainer'>
+        <div className='flexItem'><p>
+          <span className='fa fa-pencil-square'/>
+          {' '}<span className='small'>Reviews Available:</span>
+          <b>{reviews.length}</b>
+        </p></div>
         {reviews.length > 0 ?
-          <button onClick={startReview}>review now</button> :
-          <p>Cannot review right now, try again later.</p>
+          <div className='relative'>
+            <button className='rightbottom' onClick={startReview}>review now</button>
+          </div>
+          : <div className='flexItem'><p>Cannot review right now, try again later.</p></div>
         }
       </div>
     )

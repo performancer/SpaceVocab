@@ -73,12 +73,13 @@ router.get('/packages/:id', async (request, response, next) => {
 
 router.delete('/packages/:id', async (request, response, next) => {
     try {
+        const id = request.params.id
         const user = await helper.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
 
-        user.packages = user.packages.filter(p => p.id !== request.params.id)
+        user.packages = user.packages.filter(p => !p.source.equals(id) && !p.id.equals(id))
         user.save()
         response.status(200).json()
     } catch (exception) {

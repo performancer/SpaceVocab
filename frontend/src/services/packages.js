@@ -3,28 +3,8 @@ import token from '../utils/token'
 const commonUrl = '/api/packages'
 const userUrl = '/api/data/packages'
 
-const getPublic = async () => {
+const get = async () => {
   const response = await axios.get(commonUrl)
-  return response.data
-}
-
-const getMine = async () => {
-  const config = {
-    headers: { Authorization: token.getToken() },
-  }
-
-  const response = await axios.get(userUrl, config)
-  return response.data
-}
-
-const addPackage = async (id) => {
-  const config = {
-    headers: { Authorization: token.getToken() },
-  }
-
-  const body = { id: id }
-
-  const response = await axios.post(userUrl, body, config)
   return response.data
 }
 
@@ -32,8 +12,6 @@ const getPackage = async (id) => {
   const config = {
     headers: { Authorization: token.getToken() },
   }
-
-  console.log(config)
 
   const response = await axios.get(`${commonUrl}/${id}`, config)
   return response.data
@@ -49,15 +27,6 @@ const ratePackage = async(id, value) => {
   return response.data
 }
 
-const removePackage = async (id) => {
-  const config = {
-    headers: { Authorization: token.getToken() },
-  }
-
-  const response = await axios.delete(`${userUrl}/${id}`, config)
-  return response.data
-}
-
 const getWord = async (pack, id) => {
   const response = await axios.get(`${commonUrl}/${pack}/${id}`)
   return response.data
@@ -65,11 +34,8 @@ const getWord = async (pack, id) => {
 
 
 export default {
-  getPublic,
-  getMine,
-  addPackage,
+  get,
   getPackage,
   ratePackage,
-  removePackage,
   getWord
 }
