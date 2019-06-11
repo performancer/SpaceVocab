@@ -1,12 +1,12 @@
 import axios from 'axios'
 import token from '../utils/token'
-const baseUrl = '/api/reviews'
+const url = '/api/reviews'
 
 const get = (id) => {
   const config = {
     headers: { Authorization: token.getToken() },
   }
-  const request = axios.get(`${baseUrl}/${id}`, config)
+  const request = axios.get(`${url}/${id}`, config)
   return request.then(response => response.data)
 }
 
@@ -19,7 +19,7 @@ const review = async (pack, word, answer) => {
     answer: answer
   }
 
-  const response = await axios.put(`${baseUrl}/${pack}/${word}`, body, config)
+  const response = await axios.put(`${url}/${pack}/${word}`, body, config)
   return response.data
 }
 

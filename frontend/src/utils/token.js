@@ -5,7 +5,11 @@ const exists = () => {
 }
 
 const getToken = () => {
-  return `bearer ${store.getState().user.token}`
+  if(exists())  {
+    return `bearer ${store.getState().user.token}`
+  } else {
+    return null
+  }
 }
 
 export default { getToken, exists }

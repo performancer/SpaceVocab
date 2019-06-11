@@ -36,8 +36,10 @@ const Register = (props) => {
       }
   }
 
+
   return (
       <form className='center' onSubmit={register}>
+        <h1>Register</h1>
         <p className='error'>{error}</p>
         <p><b>Username</b><br />
         <input type="text" {...username.collection}/></p>

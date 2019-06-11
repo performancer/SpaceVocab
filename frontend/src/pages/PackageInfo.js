@@ -13,12 +13,15 @@ const PackageInfo = ({id}) => {
 
   useEffect(() => {
     packageService.getPackage(id).then(selected => {
-      setSubscribed(selected.subscribed)
+        setSubscribed(selected.subscribed)
 
-      const opinion = selected.likes.find(o => o.user.username === store.getState().user.username)
+      if(store.getState().user) {
+        const opinion = selected.likes
+          .find(o => o.user.username === store.getState().user.username)
 
-      if(opinion)
-        setOpinion(opinion.value)
+        if(opinion)
+          setOpinion(opinion.value)
+      }
 
       setSelected( selected )
     })
@@ -51,7 +54,8 @@ const PackageInfo = ({id}) => {
 
   const rate = async (value) => {
     try {
-      await packageService.ratePackage(selected._id, opinion === value ? 0 : value)
+      await packageService.ratePackage(selected._id,
+        opinion === value ? 0 : value)
       setOpinion(value)
     } catch (exception) {
       console.log(exception)
@@ -62,15 +66,22 @@ const PackageInfo = ({id}) => {
       return (
         <div className='centered'>
           { subscribed ?
-            <button className='borderlessButtonDark' onClick={unsubscribe}>Unsubscribe</button> :
-            <button className='borderlessButtonDark' onClick={subscribe}>Subscribe</button>
+            <button className='borderlessButtonDark' onClick={unsubscribe}>
+              Unsubscribe
+            </button> :
+            <button className='borderlessButtonDark' onClick={subscribe}>
+              Subscribe
+            </button>
           }
 
           <button className='borderlessButton' onClick={() => rate(1)}>
             <span className={opinion > 0 ? 'success' : 'gray'}>
               <span className='fa fa-thumbs-up' />
               <span className='small'>
-                {selected.likes.filter(l => l.value > 0 && l.user.username !== store.getState().user.username).length + (opinion > 0 ? 1 : 0)}
+                {selected.likes.filter(l =>
+                  l.value > 0
+                  && l.user.username !== store.getState().user.username)
+                  .length + (opinion > 0 ? 1 : 0)}
               </span>
             </span>
           </button>
@@ -78,7 +89,10 @@ const PackageInfo = ({id}) => {
             <span className={opinion < 0 ? 'error' : 'gray'}>
               <span className='fa fa-thumbs-down' />
               <span className='small'>
-                {selected.likes.filter(l => l.value < 0 && l.user.username !== store.getState().user.username).length + + (opinion < 0 ? 1 : 0)}
+                {selected.likes.filter(l =>
+                  l.value < 0
+                  && l.user.username !== store.getState().user.username)
+                  .length + (opinion < 0 ? 1 : 0)}
               </span>
             </span>
           </button>
@@ -97,10 +111,12 @@ const PackageInfo = ({id}) => {
         <li>Language: <b>{selected.language}</b></li>
         <li>Words: <b>{selected.words.length}</b></li>
       </ul>
-      <div className='details'>Details here</div>
+      <div className='details'><span className='small'>Details here</span></div>
+      <br />
       <Togglable buttonLabel='show words' closeLabel='hide'>
         <p>
-          {selected.words.map(w => <b key={w._id} className='word'>{w.word}</b>)}
+          {selected.words
+            .map(w => <b key={w._id} className='word'>{w.word}</b>)}
         </p>
       </Togglable>
     </div>

@@ -42,7 +42,7 @@ const UserPackage = (props) => {
         </p></div>
         {reviews.length > 0 ?
           <div className='relative'>
-            <button className='rightbottom' onClick={startReview}>review now</button>
+            <button className='rightbottom' onClick={startReview}>Review Now</button>
           </div>
           : <div className='flexItem'><p>Cannot review right now, try again later.</p></div>
         }

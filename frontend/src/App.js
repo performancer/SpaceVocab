@@ -71,6 +71,12 @@ const App = () => {
           <Route exact path="/review" render={() => !store.getState().user ? <Redirect to="/" />
           : <ReviewPage reviews={reviews} reviewHandler={handleReviews}/>} />
         </div>
+
+        <footer>
+          <span className='right'>
+            <i className='small'>by Alex Leppäkoski</i>
+          </span>
+        </footer>
       </BrowserRouter>
     </div>
   )

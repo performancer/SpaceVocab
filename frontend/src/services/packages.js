@@ -1,10 +1,9 @@
 import axios from 'axios'
 import token from '../utils/token'
-const commonUrl = '/api/packages'
-const userUrl = '/api/data/packages'
+const url = '/api/packages'
 
 const get = async () => {
-  const response = await axios.get(commonUrl)
+  const response = await axios.get(url)
   return response.data
 }
 
@@ -13,7 +12,7 @@ const getPackage = async (id) => {
     headers: { Authorization: token.getToken() },
   }
 
-  const response = await axios.get(`${commonUrl}/${id}`, config)
+  const response = await axios.get(`${url}/${id}`, config)
   return response.data
 }
 
@@ -23,12 +22,12 @@ const ratePackage = async(id, value) => {
   }
   const body = { value: value }
 
-  const response = await axios.put(`${commonUrl}/${id}`, body, config)
+  const response = await axios.put(`${url}/${id}`, body, config)
   return response.data
 }
 
 const getWord = async (pack, id) => {
-  const response = await axios.get(`${commonUrl}/${pack}/${id}`)
+  const response = await axios.get(`${url}/${pack}/${id}`)
   return response.data
 }
 
