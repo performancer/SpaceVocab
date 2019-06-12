@@ -1,6 +1,8 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
 
+import PackagePropsList from './PackagePropsList'
+
 const PackageEntry = (props) => {
   const {content} = props
 
@@ -21,7 +23,10 @@ const PackageEntry = (props) => {
     <div className='package' >
       <div className='flexContainer'>
         <div className='flexItem'>
-          <h3><span className='fa fa-folder-o'/> {content.name}</h3>
+          <h3 className='pointer' onClick={details}>
+            <span className='fa fa-folder-o'/>
+            {' '}{content.name}
+          </h3>
         </div>
         <div className='flexItem'>
           <b className='right'>
@@ -34,10 +39,11 @@ const PackageEntry = (props) => {
       </div>
       <div className='flexContainer'>
         <div className='flexItem'>
-          <ul>
-            <li>Language: <b>{content.language}</b></li>
-            <li>Words: <b>{content.words.length}</b></li>
-          </ul>
+          <PackagePropsList
+            id={content._id}
+            language={content.language}
+            words={content.words.length}
+          />
         </div>
         <div className='flexItem'>
           <div className='relative'>

@@ -34,6 +34,10 @@
   padding: 0.5em;
 }
 
+.pointer {
+    cursor: pointer;
+}
+
 body {
   margin: 0;
   font-family: 'Trebuchet MS', Helvetica, sans-serif;
@@ -52,6 +56,7 @@ body {
 }
 
 .simpleButton {
+  font-size: 16px;
   color: white;
   text-decoration: underline;
   margin: 0 0.3em;

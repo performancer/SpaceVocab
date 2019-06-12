@@ -1,6 +1,7 @@
 import React, { useState, useEffect }  from 'react';
 import store from '../store'
 
+import PackagePropsList from '../components/PackagePropsList'
 import Togglable from '../components/Togglable'
 
 import packageService from '../services/packages'
@@ -13,22 +14,25 @@ const PackageInfo = ({id}) => {
 
   useEffect(() => {
     packageService.getPackage(id).then(selected => {
-        setSubscribed(selected.subscribed)
+      setSelected( selected )
 
       if(store.getState().user) {
-        const opinion = selected.likes
-          .find(o => o.user.username === store.getState().user.username)
+        const like = selected.likes
+          .find(l => l.user.username === store.getState().user.username)
 
-        if(opinion)
-          setOpinion(opinion.value)
+        if(like && opinion !== like.value)
+          setOpinion(like.value)
+
+        if(subscribed !== selected.subscribed) {
+          setSubscribed(selected.subscribed)
+        }
       }
-
-      setSelected( selected )
     })
-  }, [])
+  }, [store.getState().user])
 
-  if(!selected)
+  if(!selected) {
       return <div className='loader' />
+  }
 
   const subscribe = async () => {
     try {
@@ -54,9 +58,10 @@ const PackageInfo = ({id}) => {
 
   const rate = async (value) => {
     try {
-      await packageService.ratePackage(selected._id,
-        opinion === value ? 0 : value)
+      value = opinion === value ? 0 : value //clicking again cancels opinion
+      await packageService.ratePackage(selected._id, value)
       setOpinion(value)
+
     } catch (exception) {
       console.log(exception)
     }
@@ -106,14 +111,14 @@ const PackageInfo = ({id}) => {
       {' '}{selected.name}
       </h1>
       {store.getState().user ? buttons() : null}
-      <ul>
-        <li>ID: {id}</li>
-        <li>Language: <b>{selected.language}</b></li>
-        <li>Words: <b>{selected.words.length}</b></li>
-      </ul>
+      <PackagePropsList
+        id={selected._id}
+        language={selected.language}
+        words={selected.words.length}
+      />
       <div className='details'><span className='small'>Details here</span></div>
       <br />
-      <Togglable buttonLabel='show words' closeLabel='hide'>
+      <Togglable buttonLabel='show words' closeLabel='hide words'>
         <p>
           {selected.words
             .map(w => <b key={w._id} className='word'>{w.word}</b>)}

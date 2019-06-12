@@ -8,7 +8,7 @@ import PackageSearchPage from './pages/PackageSearch'
 import RegisterPage from './pages/Register'
 import ReviewPage from './pages/Review'
 
-import LoginForm from './components/LoginForm'
+import LoginStatus from './components/LoginStatus'
 import Togglable from './components/Togglable'
 
 import './styles/basic.css'
@@ -53,7 +53,7 @@ const App = () => {
               <button className='right'><span className="fa fa-gear"></span></button>
             </div>
           </div>
-          <LoginForm />
+          <LoginStatus />
         </header>
         <div>
           <Togglable ref={navRef}>

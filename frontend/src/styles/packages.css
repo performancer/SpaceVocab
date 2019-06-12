@@ -24,6 +24,27 @@
   margin: 2em;
 }
 
+.answerBar input, .answerBar button {
+    font-size: 25px;
+    height: auto;
+    padding: 0 0.5em;
+    margin: 0;
+    border-color: #446;
+}
+
+.answerBar input {
+  text-align: center;
+  width: 70%;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.answerBar button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
+}
+
 .borderlessButton {
   font-size: 20px;
   font-weight: bold;

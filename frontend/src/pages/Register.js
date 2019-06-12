@@ -46,7 +46,7 @@ const Register = (props) => {
         <p><b>Password</b><br />
         <input type="password" {...password.collection}/></p>
         <p><input type="password" {...repeatPassword.collection}/></p>
-        <p><button type="submit">Sign up</button></p>
+        <p><button className='borderlessButtonDark' type="submit">Sign up</button></p>
       </form>
   )
 }
