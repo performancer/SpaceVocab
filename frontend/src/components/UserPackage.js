@@ -1,14 +1,8 @@
-import React, {useState, useEffect} from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
-import reviewService from '../services/reviews'
 
 const UserPackage = (props) => {
   const {content, reviewHandler} = props
-  const [reviews, setReviews] = useState(null)
-
-  useEffect(() => {
-    reviewService.get(content._id).then(reviews => setReviews(reviews))
-  }, [content.source, content._id])
 
   const startReview = () => {
     console.log('start reviews')
@@ -30,17 +24,14 @@ const UserPackage = (props) => {
   }
 
   const status = () => {
-    if(!reviews)
-      return <p>Gathering information, please wait...</p>
-
     return (
       <div className='flexContainer'>
         <div className='flexItem'><p>
           <span className='fa fa-pencil-square'/>
           {' '}<span className='small'>Reviews Available:</span>
-          <b>{reviews.length}</b>
+        <b>{content.reviews}</b>
         </p></div>
-        {reviews.length > 0 ?
+        {content.reviews > 0 ?
           <div className='relative'>
             <button className='rightbottom' onClick={startReview}>Review Now</button>
           </div>

@@ -14,28 +14,8 @@ router.get('/:package', async (request, response, next) => {
         if(!package)
             response.status(404).json({ error: 'no such package' })
 
-        const review = package.words.filter(word => {
-
-            //if this word has not been reviewed before, it can be reviewed
-            if(!word.reviews || word.reviews.length === 0)
-                return true
-
-            //calculate the current stage of this word based on successes
-            var stage = 0
-            for(var i = 0; i <word.reviews.length; i++)
-                stage += (!word.reviews[i].success && stage > 0) ? -1 : 1
-
-            //get milliseconds from the time of last review
-            const latestReview = word.reviews[word.reviews.length - 1]
-            const milliseconds = (new Date()).getTime() - latestReview.datetime
-            //calculate the wait untill this word can be reviewed again
-            const duration = stage * 360000
-
-            console.log(`word:${word.word} stage:${stage} in:${(duration - milliseconds) / (1000 * 60)}min`)
-
-            //if the duration has passed the word can be reviewed again
-            return milliseconds > duration
-        })
+        const review = helper.getReviewable(package.words)
+        review.name = Package.findById(request.params.package).name
 
         response.json(review)
 

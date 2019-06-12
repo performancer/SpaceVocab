@@ -9,7 +9,13 @@ router.get('/packages', async (request, response, next) => {
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
 
-        response.json(user.packages)
+        const packages = user.packages.map(package => {
+            return { ...package.toObject(),
+                reviews: helper.getReviewable(package.words).length }
+        })
+
+        console.log(packages)
+        response.json(packages)
 
     } catch (exception) {
         next(exception)
