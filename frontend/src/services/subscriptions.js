@@ -1,6 +1,6 @@
 import axios from 'axios'
 import token from '../utils/token'
-const url = '/api/data/packages'
+const url = '/api/subscriptions'
 
 const get = async () => {
   const config = {

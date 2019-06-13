@@ -24,7 +24,7 @@ const packageSchema = mongoose.Schema({
             synonyms: [ String ]
         }]
     }],
-    likes: [{
+    opinions: [{
         user: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'User',

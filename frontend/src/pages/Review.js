@@ -1,41 +1,29 @@
 import React, { useState, useEffect }  from 'react'
+import { withRouter } from 'react-router-dom'
 import { useField } from '../hooks'
-import packageService from '../services/packages'
 import reviewService from '../services/reviews'
 
-const Review = ({reviews, reviewHandler}) => {
+const Review = (props) => {
+  const {id} = props
+  const [reviews, setReviews] = useState(null)
   const [notification, setNotification] = useState(null)
   const [details, setDetails] = useState(false)
-  const [word, setWord] = useState(null)
 
   const answer = useField('answer')
 
-  useEffect(() => { displayNext()}, [])
+  useEffect(() => {
+    if(!id)
+      props.history.push('/')
 
-  const displayNext = async () => {
-    answer.reset()
-    setNotification(null)
-    setDetails(false)
-    setWord(null)
-
-    if(reviews.words.length > 0) {
-      const word = await packageService.getWord(reviews.source._id, reviews.words[0].word)
-      setWord( word )
-    }
-  }
+    reviewService.get(id).then(r => setReviews(r))
+  }, [id])
 
   const respond = async () => {
-    console.log(answer.value)
-
     try {
-      const response = await reviewService.review(reviews._id, reviews.words[0]._id, answer.value )
+      const response = await reviewService.review(id, getWord()._id, answer.value )
 
       if(response.success) {
         setNotification({note: 'Correct!', type: 'success'})
-
-        if(word)
-          reviews.words = reviews.words.filter(w => w.word !== word._id)
-
       } else {
         setNotification({note: 'Incorrect!', type: 'error'})
       }
@@ -47,15 +35,34 @@ const Review = ({reviews, reviewHandler}) => {
     }
   }
 
-  if(!word){
-    if(reviews.words.length === 0)
-      return <div className='linkcase'><h2><b>Ready!</b></h2></div>
+  const remove = () => {
+    const remaining = reviews.words.filter(w => w.word !== getWord().word)
 
-    return <div className='loader' />
+    if(remaining.length === 0)
+      props.history.push('/')
+
+    setReviews({...reviews, words: remaining})
   }
 
-  const renderDetails = () => {
-    const translations = word.translations.find(t => t.language === 'FI' )
+  const startNext = async () => {
+    if(notification.type === 'success') {
+      remove()
+    }
+
+    answer.reset()
+    setNotification(null)
+    setDetails(false)
+  }
+
+  if(!reviews)
+    return <div className='loader' />
+
+  const i = 0
+
+  const getWord = () => reviews.words[i]
+
+  const getDetails = () => {
+    const translations = getWord().translations.find(t => t.language === 'FI' )
 
     return (
       <div>
@@ -64,7 +71,7 @@ const Review = ({reviews, reviewHandler}) => {
           Alternatives: {translations.synonyms.join(', ')}
         </div>
         <div className='details'>
-          Details: {word.details}
+          Details: {getWord().details}
         </div>
       </div>
     )
@@ -80,12 +87,13 @@ const Review = ({reviews, reviewHandler}) => {
     padding: '0.5em',
   }
 
+
   return (
     <div>
       <div style={style}>
-        <p><b>Review:</b> {reviews.source.name}</p>
+        <p><b>Review:</b> {reviews.name}</p>
         <div className='centered'>
-          <h2>{word.word}</h2>
+          <h2>{reviews.words[i].spelling}</h2>
         </div>
       </div>
       <div className='centered'>
@@ -94,7 +102,7 @@ const Review = ({reviews, reviewHandler}) => {
           { details ?
             <div>
               <input type='text' {...answer.collection} disabled/>
-              <button onClick={displayNext}>
+              <button onClick={startNext}>
                 <span className='fa fa-caret-right' />
             </button>
             </div>
@@ -109,10 +117,11 @@ const Review = ({reviews, reviewHandler}) => {
         </div>
       </div>
 
-      {details ? renderDetails() : null }
+      {details ? getDetails() : null}
 
     </div>
   )
 }
 
-export default Review
+const ReviewPage = withRouter(Review)
+export default ReviewPage

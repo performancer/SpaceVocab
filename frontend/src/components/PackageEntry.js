@@ -7,8 +7,8 @@ const PackageEntry = (props) => {
   const {content} = props
 
   const getRate = () => {
-    const likes = content.likes.filter(o => o.value > 0 ).length
-    const dislikes = content.likes.filter(o => o.value < 0 ).length
+    const likes = content.opinions.filter(o => o.value > 0 ).length
+    const dislikes = content.opinions.filter(o => o.value < 0 ).length
 
     return likes - dislikes
   }

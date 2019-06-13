@@ -61,7 +61,7 @@ router.get('/:id', async (request, response, next) => {
     try {
         console.log(request.token)
         const user = await helper.getUser(request.token)
-        const package = await Package.findById(request.params.id).populate('likes.user', { username: 1 })
+        const package = await Package.findById(request.params.id).populate('opinions.user', { username: 1 })
 
         const subscribed = user && user.packages.find(p => p.source.equals(package.id)) ? true : false
 

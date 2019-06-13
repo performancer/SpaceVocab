@@ -2,12 +2,12 @@ import axios from 'axios'
 import token from '../utils/token'
 const url = '/api/reviews'
 
-const get = (id) => {
+const get = async (id) => {
   const config = {
     headers: { Authorization: token.getToken() },
   }
-  const request = axios.get(`${url}/${id}`, config)
-  return request.then(response => response.data)
+  const response = await axios.get(`${url}/${id}`, config)
+  return response.data
 }
 
 const review = async (pack, word, answer) => {

@@ -1,5 +1,6 @@
 import React from 'react'
 import { withRouter } from 'react-router-dom'
+import helper from '../utils/helper'
 
 const UserPackage = (props) => {
   const {content, reviewHandler} = props
@@ -7,6 +8,7 @@ const UserPackage = (props) => {
   const startReview = () => {
     console.log('start reviews')
     reviewHandler(content)
+    helper.setReviews(content._id)
     props.history.push('/review')
   }
 

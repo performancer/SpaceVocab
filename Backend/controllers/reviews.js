@@ -14,10 +14,14 @@ router.get('/:package', async (request, response, next) => {
         if(!package)
             response.status(404).json({ error: 'no such package' })
 
-        const review = helper.getReviewable(package.words)
-        review.name = Package.findById(request.params.package).name
+        const source = await Package.findById(package.source)
+        const reviews = helper.getReviewable(package.words).map(w => {
+            const sourceWord = source.words.find(s => w.word.equals(s.id))
+            return { ...w.toObject(), spelling: sourceWord.word, translations: sourceWord.translations }
+        })
 
-        response.json(review)
+        console.log(reviews)
+        response.json({ words: [ ...reviews ], name: source.name })
 
     } catch (exception) {
         next(exception)

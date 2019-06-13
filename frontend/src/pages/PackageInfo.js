@@ -16,12 +16,14 @@ const PackageInfo = ({id}) => {
     packageService.getPackage(id).then(selected => {
       setSelected( selected )
 
-      if(store.getState().user) {
-        const like = selected.likes
-          .find(l => l.user.username === store.getState().user.username)
+      console.log(store.getState().user)
 
-        if(like && opinion !== like.value)
-          setOpinion(like.value)
+      if(store.getState().user) {
+        const saved = selected.opinions
+          .find(o => o.user._id === store.getState().user.id)
+
+        if(saved && opinion !== saved.value)
+          setOpinion(saved.value)
 
         if(subscribed !== selected.subscribed) {
           setSubscribed(selected.subscribed)
@@ -83,9 +85,9 @@ const PackageInfo = ({id}) => {
             <span className={opinion > 0 ? 'success' : 'gray'}>
               <span className='fa fa-thumbs-up' />
               <span className='small'>
-                {selected.likes.filter(l =>
-                  l.value > 0
-                  && l.user.username !== store.getState().user.username)
+                {selected.opinions.filter(o =>
+                  o.value > 0
+                  && o.user._id !== store.getState().user.id)
                   .length + (opinion > 0 ? 1 : 0)}
               </span>
             </span>
@@ -94,9 +96,9 @@ const PackageInfo = ({id}) => {
             <span className={opinion < 0 ? 'error' : 'gray'}>
               <span className='fa fa-thumbs-down' />
               <span className='small'>
-                {selected.likes.filter(l =>
-                  l.value < 0
-                  && l.user.username !== store.getState().user.username)
+                {selected.opinions.filter(o =>
+                  o.value < 0
+                  && o.user._id !== store.getState().user.id)
                   .length + (opinion < 0 ? 1 : 0)}
               </span>
             </span>
@@ -108,7 +110,7 @@ const PackageInfo = ({id}) => {
   return (
     <div className='package'>
       <h1 className='centered'><span className='fa fa-folder-open-o'/>
-      {' '}{selected.name}
+        {' '}{selected.name}
       </h1>
       {store.getState().user ? buttons() : null}
       <PackagePropsList

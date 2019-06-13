@@ -11,6 +11,8 @@ import ReviewPage from './pages/Review'
 import LoginStatus from './components/LoginStatus'
 import Togglable from './components/Togglable'
 
+import helper from './utils/helper'
+
 import './styles/basic.css'
 import './styles/header.css'
 import './styles/packages.css'
@@ -69,7 +71,7 @@ const App = () => {
           <Route exact path="/users" render={() => <p>users</p>} />
           <Route exact path="/users/:name" render={({ match }) => <p>{match.params.name}</p>} />
           <Route exact path="/review" render={() => !store.getState().user ? <Redirect to="/" />
-          : <ReviewPage reviews={reviews} reviewHandler={handleReviews}/>} />
+          : <ReviewPage id={helper.getReviews()} />} />
         </div>
 
         <footer>

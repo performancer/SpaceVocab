@@ -8,12 +8,8 @@ router.post('/', async (request, response, next) => {
         const body = request.body
 
         const user = await User.findOne({ username: body.username })
-        const passwordCorrect =
-        user === null
-            ? false
+        const passwordCorrect = user === null ? false
             : await bcrypt.compare(body.password, user.passwordHash)
-
-        console.log(user)
 
         if (!user || !passwordCorrect) {
             return response.status(401).json({
@@ -22,7 +18,13 @@ router.post('/', async (request, response, next) => {
         }
 
         const token = helper.getToken(user)
-        response.status(200).send({ token, username: user.username })
+        response.status(200).send(
+            {
+                token,
+                username: user.username,
+                id: user.id
+            }
+        )
     } catch (exception) {
         next(exception)
     }

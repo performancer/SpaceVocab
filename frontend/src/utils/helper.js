@@ -12,4 +12,11 @@ const logout = () => {
   }
 }
 
-export default {login, logout}
+let reviews = null
+
+const getReviews = () => reviews
+const setReviews = (value) => {
+  reviews = value
+}
+
+export default {login, logout, getReviews, setReviews}

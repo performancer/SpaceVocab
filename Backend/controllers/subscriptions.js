@@ -2,7 +2,7 @@ const router = require('express').Router()
 const helper = require('../utils/helper')
 const Package = require('../models/package')
 
-router.get('/packages', async (request, response, next) => {
+router.get('/', async (request, response, next) => {
     try {
         const user = await helper.getUser(request.token)
 
@@ -22,7 +22,7 @@ router.get('/packages', async (request, response, next) => {
     }
 })
 
-router.post('/packages', async (request, response, next) => {
+router.post('/', async (request, response, next) => {
     try {
         const id = request.body.id
         const user = await helper.getUser(request.token)
@@ -62,7 +62,7 @@ router.post('/packages', async (request, response, next) => {
     }
 })
 
-router.get('/packages/:id', async (request, response, next) => {
+router.get('/:id', async (request, response, next) => {
     try {
         const user = await helper.getUser(request.token)
 
@@ -77,7 +77,7 @@ router.get('/packages/:id', async (request, response, next) => {
     }
 })
 
-router.delete('/packages/:id', async (request, response, next) => {
+router.delete('/:id', async (request, response, next) => {
     try {
         const id = request.params.id
         const user = await helper.getUser(request.token)
