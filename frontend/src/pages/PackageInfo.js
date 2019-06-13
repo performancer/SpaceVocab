@@ -1,4 +1,5 @@
 import React, { useState, useEffect }  from 'react';
+import { withRouter } from 'react-router-dom'
 import store from '../store'
 
 import PackagePropsList from '../components/PackagePropsList'
@@ -7,7 +8,8 @@ import Togglable from '../components/Togglable'
 import packageService from '../services/packages'
 import subscriptionService from '../services/subscriptions'
 
-const PackageInfo = ({id}) => {
+const PackageInfo = (props) => {
+  const {id} = props
   const [selected, setSelected] = useState(null)
   const [subscribed, setSubscribed] = useState(false)
   const [opinion, setOpinion] = useState(0)
@@ -29,7 +31,10 @@ const PackageInfo = ({id}) => {
           setSubscribed(selected.subscribed)
         }
       }
+    }).catch( () => {
+      props.history.push('/packages')
     })
+
   }, [store.getState().user])
 
   if(!selected) {
@@ -130,4 +135,5 @@ const PackageInfo = ({id}) => {
   )
 }
 
-export default PackageInfo;
+const PackageInfoPage = withRouter(PackageInfo)
+export default PackageInfoPage;

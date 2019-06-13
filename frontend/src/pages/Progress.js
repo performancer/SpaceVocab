@@ -1,12 +1,16 @@
 import React, {useState, useEffect} from 'react'
+import { withRouter } from 'react-router-dom'
 import subscriptionService from '../services/subscriptions'
 import token from '../utils/token'
 
-const Progress = ({id}) => {
+const Progress = (props) => {
+  const {id} = props
   const [subscription, setSubscription] = useState(null)
 
   useEffect( () => {
-    subscriptionService.get(id).then(s => setSubscription(s))
+      subscriptionService.get(id).then(s => setSubscription(s)).catch( () => {
+        props.history.push('/')
+      })
   }, [])
 
   if(!token.exists()) {
@@ -55,4 +59,5 @@ const Progress = ({id}) => {
   )
 }
 
-export default Progress
+const ProgressPage = withRouter(Progress)
+export default ProgressPage
