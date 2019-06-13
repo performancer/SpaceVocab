@@ -120,8 +120,11 @@ const Review = (props) => {
           }
         </div>
       </div>
-
-      {details ? getDetails() : null}
+      { (!details && getWord().stage === 0) ?
+        <b className='error'>
+          This is the first time reviewing this word so pay attention here:
+        </b> : null}
+      { (details || getWord().stage === 0) ? getDetails() : null}
 
     </div>
   )
