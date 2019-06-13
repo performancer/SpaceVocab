@@ -87,6 +87,10 @@ body {
   cursor: pointer;
 }
 
+.simpleButton:hover {
+  background:none;
+}
+
 .flexContainer {
   display: flex;
   flex-wrap: wrap;
