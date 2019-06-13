@@ -26,8 +26,11 @@ const getReviewable = (words) => {
     const reviewables = words.filter(word => {
 
         //if this word has not been reviewed before, it can be reviewed
-        if(!word.reviews || word.reviews.length === 0)
+        if(word.stage === 0)
             return true
+        //if this word is in 'perfect' stage it will never be reviewed again
+        else if (word.stage === 4)
+            return false
 
         //calculate the current stage of this word based on successes
         var stage = 0

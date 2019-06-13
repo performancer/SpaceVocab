@@ -17,7 +17,7 @@ const Progress = ({id}) => {
     return <div className='loader' />
 
   const getWords = (stage) => {
-    let className = 'unknownWord'
+    let className = 'word'
     let title = 'Unknown'
 
     switch(stage) {
@@ -28,7 +28,7 @@ const Progress = ({id}) => {
       case 3: title = 'Very good'; break
       case 2: title = 'Good'; break
       case 1: title = 'Basic'; break
-      default: break
+      default: className = 'unknownWord'; break
     }
 
     const words = subscription.words.filter(w => w.stage === stage)

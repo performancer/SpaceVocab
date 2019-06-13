@@ -18,8 +18,8 @@ const Review = (props) => {
       props.history.push('/')
 
     reviewService.get(id).then(r => {
-      setReviews(r)
       i = Math.floor(Math.random() * r.words.length)
+      setReviews(r)
     })
   }, [id])
 

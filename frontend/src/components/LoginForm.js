@@ -49,7 +49,7 @@ const LoginForm = ({visibilityHandler, registerHandler}) => {
           <input type="text" {...username.collection}/></p>
           <p><b>Password</b><br />
           <input type="password"{...password.collection}/></p>
-          <p><button type="submit">Login</button></p>
+          <p><button className='borderlessButtonDark' type="submit">Login</button></p>
         </form>
         <div className="modal-footer">
           <p>
