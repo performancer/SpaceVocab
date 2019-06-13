@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react'
 import subscriptionService from '../services/subscriptions'
+import token from '../utils/token'
 
 const Progress = ({id}) => {
   const [subscription, setSubscription] = useState(null)
@@ -7,6 +8,13 @@ const Progress = ({id}) => {
   useEffect( () => {
     subscriptionService.get(id).then(s => setSubscription(s))
   }, [])
+
+  if(!token.exists()) {
+    return <div>You need to log in to view your packages</div>
+  }
+
+  if(!subscription)
+    return <div className='loader' />
 
   const getWords = (stage) => {
     let className = 'unknownWord'
@@ -34,9 +42,6 @@ const Progress = ({id}) => {
       )
     }
   }
-
-  if(!subscription)
-    return <div className='loader' />
 
   return (
     <div>
