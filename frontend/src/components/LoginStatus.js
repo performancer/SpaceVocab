@@ -1,9 +1,7 @@
 import React, {useState} from 'react'
 import { withRouter } from 'react-router-dom'
 import store from '../store'
-
 import LoginForm from './LoginForm'
-import helper from '../utils/helper'
 
 const LoginStatus = (props) => {
   const [modalVisible, setModalVisible] = useState(false)
@@ -19,7 +17,6 @@ const LoginStatus = (props) => {
         <span className='left'><b className="fa fa-user"> {' '}
           {store.getState().user.username}</b>
         </span>
-        <button className='right' onClick={helper.logout}>Logout</button>
       </div>
     )
   }

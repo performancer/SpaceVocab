@@ -10,6 +10,7 @@ import ReviewPage from './pages/Review'
 
 import LoginStatus from './components/LoginStatus'
 import Togglable from './components/Togglable'
+import Settings from './components/Settings'
 
 import helper from './utils/helper'
 
@@ -20,7 +21,7 @@ import './styles/modal.css'
 import './styles/loader.css'
 
 const App = () => {
-  const [reviews, setReviews] = useState(null)
+  const [spin, setSpin] = useState(false)
 
   useEffect(() => {
     let user = null
@@ -35,11 +36,8 @@ const App = () => {
   if(!store.getState())
     return <div className='loader' />
 
-  const handleReviews = async (reviews) => {
-    setReviews(reviews)
-  }
-
   const navRef = React.createRef()
+  const setRef = React.createRef()
 
   return (
     <div>
@@ -47,12 +45,26 @@ const App = () => {
         <header>
           <div className='flexContainer'>
             <div className='menuButton'>
-              <button className='left' onClick={() => navRef.current.toggleVisibility()}>
-                <span className="fa fa-bars"></span>
+              <button className='left'
+                onClick={() => {
+                  navRef.current.toggleVisibility()
+                  setRef.current.setVisible(false)
+                  setSpin(false)
+                }}>
+                <span className="fa fa-bars" />
               </button>
             </div>
             <div className='menuButton'>
-              <button className='right'><span className="fa fa-gear"></span></button>
+              <button className='right'
+                onClick={() =>  {
+                  setSpin(!setRef.current.getVisible())
+                  setRef.current.toggleVisibility()
+                  navRef.current.setVisible(false)
+                }}>
+                <div className={spin ? 'spinner' : ''}>
+                  <span className="fa fa-gear" />
+                </div>
+            </button>
             </div>
           </div>
           <LoginStatus />
@@ -64,7 +76,10 @@ const App = () => {
               <Link className='link' to="/packages">Search for Packages</Link>
             </div>
           </Togglable>
-          <Route exact path="/" render={() => <HomePage reviewHandler={handleReviews}/>} />
+          <Togglable ref={setRef}>
+              <Settings />
+          </Togglable>
+          <Route exact path="/" render={() => <HomePage />} />
           <Route exact path="/register" render={() => store.getState().user ? <Redirect to="/" /> : <RegisterPage />} />
           <Route exact path="/packages" render={() => <PackageSearchPage />} />
           <Route exact path="/packages/:id" render={({ match }) => <PackageInfoPage id={match.params.id} />} />

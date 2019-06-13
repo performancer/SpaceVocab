@@ -38,6 +38,11 @@
     cursor: pointer;
 }
 
+.spinner {
+  -webkit-animation: spin 4s linear infinite; /* Safari */
+  animation: spin 4s linear infinite;
+}
+
 body {
   margin: 0;
   font-family: 'Trebuchet MS', Helvetica, sans-serif;
@@ -85,6 +90,10 @@ body {
   flex-grow: 1;
   padding: 0 1em;
   text-align: center;
+}
+
+button:focus {
+  outline: 0
 }
 
 .menuButton > button {

@@ -15,9 +15,7 @@ const PackageInfo = ({id}) => {
   useEffect(() => {
     packageService.getPackage(id).then(selected => {
       setSelected( selected )
-
-      console.log(store.getState().user)
-
+      
       if(store.getState().user) {
         const saved = selected.opinions
           .find(o => o.user._id === store.getState().user.id)
