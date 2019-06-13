@@ -2,12 +2,14 @@ import axios from 'axios'
 import token from '../utils/token'
 const url = '/api/subscriptions'
 
-const get = async () => {
+const get = async (id) => {
   const config = {
     headers: { Authorization: token.getToken() },
   }
 
-  const response = await axios.get(url, config)
+  const newUrl = id ? `${url}/${id}` : url
+
+  const response = await axios.get(newUrl, config)
   return response.data
 }
 

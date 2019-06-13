@@ -28,8 +28,8 @@ const Home = ({reviewHandler}) => {
           <p>No subscriptions yet. :(</p>
           <p>Please search for packages and subscribe to them.</p>
         </div>
-        : subscriptions.map(p =>
-          <UserPackage key={p._id} content={p} reviewHandler={reviewHandler}/>
+        : subscriptions.map(s =>
+          <UserPackage key={s.id} content={s} reviewHandler={reviewHandler}/>
         )
       }
     </div>

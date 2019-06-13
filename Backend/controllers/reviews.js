@@ -17,7 +17,7 @@ router.get('/:package', async (request, response, next) => {
         const source = await Package.findById(package.source)
         const reviews = helper.getReviewable(package.words).map(w => {
             const sourceWord = source.words.find(s => w.word.equals(s.id))
-            return { ...w.toObject(), spelling: sourceWord.word, translations: sourceWord.translations }
+            return { ...w.toObject(), spelling: sourceWord.spelling, translations: sourceWord.translations }
         })
 
         console.log(reviews)

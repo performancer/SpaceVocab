@@ -48,6 +48,22 @@ body {
   font-family: 'Trebuchet MS', Helvetica, sans-serif;
 }
 
+.buttonRight {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.buttonLeft {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  border-left: none;
+}
+
+.buttonBoth {
+  border-radius: 0;
+  border-left: none;
+}
+
 .gray {
   color: gray
 }
@@ -86,26 +102,6 @@ body {
   text-align: center;
 }
 
-.menuButton {
-  flex-grow: 1;
-  padding: 0 1em;
-  text-align: center;
-}
-
-button:focus {
-  outline: 0
-}
-
-.menuButton > button {
-  color: white;
-  font-size: 30px;
-  margin:0;
-  padding:0;
-  background:none;
-  border:none;
-  cursor: pointer;
-}
-
 header, footer {
   background-color: #335;
   color: #FFF;
@@ -128,6 +124,14 @@ button {
   border-radius: 10px;
   border-color: #88A;
   cursor: pointer;
+}
+
+button:hover{
+  background-color: #88A;
+}
+
+button:focus {
+  outline: 0
 }
 
 input {

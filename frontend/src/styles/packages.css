@@ -11,6 +11,16 @@
   margin: 5px;
 }
 
+.perfectWord {
+  background-color: gold;
+  margin: 5px;
+}
+
+.unknownWord {
+  background-color: gray;
+  margin: 5px;
+}
+
 .details {
   margin: 0.2em;
   padding: 1em;

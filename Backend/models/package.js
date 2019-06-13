@@ -16,7 +16,7 @@ const packageSchema = mongoose.Schema({
         minlength: 2,
     },
     words: [{
-        word: String,
+        spelling: String,
         details: String,
         translations: [{
             language: String,

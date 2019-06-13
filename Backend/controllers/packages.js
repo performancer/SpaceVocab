@@ -2,52 +2,6 @@ const router = require('express').Router()
 const helper = require('../utils/helper')
 const Package = require('../models/package')
 
-/*
-const packages2 =
-    {
-        name: 'German 1',
-        package: 'DE',
-        words: [
-            {
-                word: 'wasser',
-                translations: [
-                    { language: 'FI', translation: 'vesi',synonyms: ['aqua', 'H20'] },
-                    { language: 'EN', translation: 'water', synonyms: ['aqua', 'H20'] }
-                ]
-            },
-            {
-                word: 'feuer',
-                translations: [
-                    { language: 'FI', translation: 'tuli',synonyms: ['liekki', 'lieska'] },
-                    { language: 'EN', translation: 'fire', synonyms: ['flame', 'scorch'] }
-                ]
-            }
-        ]
-    }
-
-const package3 =
-    {
-        name: 'Japanese 1',
-        package: 'JA',
-        words: [
-            {
-                word: 'みず',
-                languages: [
-                    { language: 'FI', translation: 'vesi',synonyms: ['aqua', 'H20'] },
-                    { language: 'EN', translation: 'water', synonyms: ['aqua', 'H20'] }
-                ]
-            },
-            {
-                word: 'ひ',
-                languages: [
-                    { language: 'FI', translation: 'tuli',synonyms: ['liekki', 'lieska'] },
-                    { language: 'EN', translation: 'fire', synonyms: ['flame', 'scorch'] }
-                ]
-            }
-        ]
-    }
-*/
-
 router.get('/', async (request, response, next) => {
     try {
         const packages = await Package.find({}).populate('likes.user', { username: 1 })
@@ -59,7 +13,6 @@ router.get('/', async (request, response, next) => {
 
 router.get('/:id', async (request, response, next) => {
     try {
-        console.log(request.token)
         const user = await helper.getUser(request.token)
         const package = await Package.findById(request.params.id).populate('opinions.user', { username: 1 })
 

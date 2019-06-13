@@ -12,10 +12,12 @@ const PackageInfo = ({id}) => {
   const [subscribed, setSubscribed] = useState(false)
   const [opinion, setOpinion] = useState(0)
 
+  console.log(selected)
+
   useEffect(() => {
     packageService.getPackage(id).then(selected => {
       setSelected( selected )
-      
+
       if(store.getState().user) {
         const saved = selected.opinions
           .find(o => o.user._id === store.getState().user.id)
@@ -121,7 +123,7 @@ const PackageInfo = ({id}) => {
       <Togglable buttonLabel='show words' closeLabel='hide words'>
         <p>
           {selected.words
-            .map(w => <b key={w._id} className='word'>{w.word}</b>)}
+            .map(w => <b key={w._id} className='word'>{w.spelling}</b>)}
         </p>
       </Togglable>
     </div>

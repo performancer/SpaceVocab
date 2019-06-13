@@ -3,6 +3,8 @@ import { withRouter } from 'react-router-dom'
 import { useField } from '../hooks'
 import reviewService from '../services/reviews'
 
+let i = 0
+
 const Review = (props) => {
   const {id} = props
   const [reviews, setReviews] = useState(null)
@@ -15,7 +17,10 @@ const Review = (props) => {
     if(!id)
       props.history.push('/')
 
-    reviewService.get(id).then(r => setReviews(r))
+    reviewService.get(id).then(r => {
+      setReviews(r)
+      i = Math.floor(Math.random() * r.words.length)
+    })
   }, [id])
 
   const respond = async () => {
@@ -37,6 +42,7 @@ const Review = (props) => {
 
   const remove = () => {
     const remaining = reviews.words.filter(w => w.word !== getWord().word)
+    i = Math.floor(Math.random() * remaining.length)
 
     if(remaining.length === 0)
       props.history.push('/')
@@ -56,8 +62,6 @@ const Review = (props) => {
 
   if(!reviews)
     return <div className='loader' />
-
-  const i = 0
 
   const getWord = () => reviews.words[i]
 

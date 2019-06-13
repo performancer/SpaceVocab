@@ -27,6 +27,7 @@ const userSchema = mongoose.Schema({
                 ref: 'Package',
             },
             synonyms: [String],
+            stage: Number,
             reviews: [{
                 date: Date,
                 success: Boolean

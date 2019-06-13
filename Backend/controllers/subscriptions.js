@@ -10,8 +10,11 @@ router.get('/', async (request, response, next) => {
             return response.status(401).json({ error: 'token missing or invalid' })
 
         const packages = user.packages.map(package => {
-            return { ...package.toObject(),
-                reviews: helper.getReviewable(package.words).length }
+            return {
+                id: package.id,
+                source: package.source,
+                reviews: helper.getReviewable(package.words).length
+            }
         })
 
         console.log(packages)
@@ -45,6 +48,7 @@ router.post('/', async (request, response, next) => {
             words: source.words.map(w => {
                 return {
                     word: w.id,
+                    stage: 0,
                     synonyms: [],
                     reviews: []
                 }
@@ -70,7 +74,16 @@ router.get('/:id', async (request, response, next) => {
             return response.status(401).json({ error: 'token missing or invalid' })
 
         const package = user.packages.find(p => p.id === request.params.id)
-        response.json(package)
+        const source = await Package.findById(package.source)
+
+        const words = package.words.map(w => {
+            return {
+                ...w.toObject(),
+                spelling: source.words.find(sw => w.word.equals(sw.id)).spelling
+            }
+        })
+
+        response.json({ ...package.toObject(), words: words })
 
     } catch (exception) {
         next(exception)
