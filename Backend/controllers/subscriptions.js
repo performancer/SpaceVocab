@@ -13,11 +13,11 @@ router.get('/', async (request, response, next) => {
             return {
                 id: package.id,
                 source: package.source,
+                lessons: helper.getLessons(package.words).length,
                 reviews: helper.getReviewable(package.words).length
             }
         })
 
-        console.log(packages)
         response.json(packages)
 
     } catch (exception) {

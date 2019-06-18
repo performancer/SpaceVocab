@@ -22,14 +22,16 @@ const getToken = (user) => {
     return jwt.sign(userForToken, process.env.SECRET)
 }
 
+const getLessons = (words) => {
+    return words.filter(word => word.stage === 0)
+}
+
 const getReviewable = (words) => {
     const reviewables = words.filter(word => {
 
-        //if this word has not been reviewed before, it can be reviewed
-        if(word.stage === 0)
-            return true
+        //if this word has not been reviewed before, it's a lesson
         //if this word is in 'perfect' stage it will never be reviewed again
-        else if (word.stage === 4)
+        if (word.stage === 0 || word.stage === 4)
             return false
 
         //calculate the current stage of this word based on successes
@@ -43,8 +45,7 @@ const getReviewable = (words) => {
         //calculate the wait untill this word can be reviewed again
         const duration = stage * 360000
 
-        console.log(`word:${word.word} stage:${stage} in:${(duration - milliseconds) / (1000 * 60)}min`)
-
+        return true
         //if the duration has passed the word can be reviewed again
         return milliseconds > duration
     })
@@ -52,4 +53,4 @@ const getReviewable = (words) => {
     return reviewables
 }
 
-module.exports = { getUser, getToken, getReviewable }
+module.exports = { getUser, getToken, getLessons, getReviewable }

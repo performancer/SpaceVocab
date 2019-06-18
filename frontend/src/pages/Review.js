@@ -6,7 +6,7 @@ import reviewService from '../services/reviews'
 let i = 0
 
 const Review = (props) => {
-  const {id} = props
+  const {info} = props
   const [reviews, setReviews] = useState(null)
   const [notification, setNotification] = useState(null)
   const [details, setDetails] = useState(false)
@@ -14,18 +14,18 @@ const Review = (props) => {
   const answer = useField('answer')
 
   useEffect(() => {
-    if(!id)
-      props.history.push('/')
+    if(!info || !info.id)
+      return props.history.push('/')
 
-    reviewService.get(id).then(r => {
+    reviewService.get(info.id, info.lesson).then(r => {
       i = Math.floor(Math.random() * r.words.length)
       setReviews(r)
     })
-  }, [id])
+  }, [info])
 
   const respond = async () => {
     try {
-      const response = await reviewService.review(id, getWord()._id, answer.value )
+      const response = await reviewService.review(info.id, getWord()._id, answer.value )
 
       if(response.success) {
         setNotification({note: 'Correct!', type: 'success'})
@@ -66,13 +66,13 @@ const Review = (props) => {
   const getWord = () => reviews.words[i]
 
   const getDetails = () => {
-    const translations = getWord().translations.find(t => t.language === 'FI' )
+    const word = getWord()
 
     return (
       <div>
         <div className='details'>
-          Correct Answer: <b>{translations.translation}</b><br />
-          Alternatives: {translations.synonyms.join(', ')}
+          Correct Answer: <b>{word.translation}</b><br />
+        Alternatives: {word.synonyms.join(', ')}
         </div>
         <div className='details'>
           Details: {getWord().details}

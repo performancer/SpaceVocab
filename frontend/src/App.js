@@ -88,7 +88,7 @@ const App = () => {
           <Route exact path="/users" render={() => <p>users</p>} />
           <Route exact path="/users/:name" render={({ match }) => <p>{match.params.name}</p>} />
           <Route exact path="/review" render={() => !store.getState().user ? <Redirect to="/" />
-          : <ReviewPage id={helper.getReviews()} />} />
+          : <ReviewPage info={helper.getReviews()} />} />
         <Route render={ () => <Redirect to="/" />} />
         </div>
 

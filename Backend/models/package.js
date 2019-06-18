@@ -18,11 +18,8 @@ const packageSchema = mongoose.Schema({
     words: [{
         spelling: String,
         details: String,
-        translations: [{
-            language: String,
-            translation: String,
-            synonyms: [ String ]
-        }]
+        translation: String,
+        synonyms: [ String ]
     }],
     opinions: [{
         user: {

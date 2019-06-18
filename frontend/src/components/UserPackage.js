@@ -7,15 +7,22 @@ const UserPackage = (props) => {
 
   console.log(content)
 
+  const startLesson = () => {
+    console.log('start lessons')
+    helper.setReviews({id: content.id, lesson: true})
+    props.history.push('/review')
+  }
+
   const startReview = () => {
     console.log('start reviews')
-    helper.setReviews(content.id)
+    helper.setReviews({id: content.id, lesson: false})
     props.history.push('/review')
   }
 
   const details = () => {
     props.history.push(`/packages/${content.source._id}`)
   }
+
   return (
     <div className='package' >
 
@@ -26,10 +33,16 @@ const UserPackage = (props) => {
               props.history.push(`/subscriptions/${content.id}`)}>
             Progress
           </button>
+          {content.lessons > 0 ?
+            <button className='buttonBoth' onClick={startLesson}>
+              Start Lessons
+            </button> : null
+          }
           {content.reviews > 0 ?
-          <button className='buttonBoth' onClick={startReview}>
-            Review Now
-          </button> : null}
+            <button className='buttonBoth' onClick={startReview}>
+              Start Reviews
+            </button> : null
+          }
           <button className='buttonLeft' onClick={ () =>
               props.history.push(`/packages/${content.source._id}`)}>
             View Page
@@ -43,6 +56,8 @@ const UserPackage = (props) => {
             <span className='fa fa-pencil-square'/>
             {' '}<span className='small'>Reviews Available:</span>
             <b>{content.reviews}</b>
+            {' '}<span className='small'>Lessons:</span>
+            <b>{content.lessons}</b>
           </p>
         </div>
         {content.reviews === 0 ?

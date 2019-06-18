@@ -15,12 +15,24 @@ router.get('/:package', async (request, response, next) => {
             response.status(404).json({ error: 'no such package' })
 
         const source = await Package.findById(package.source)
-        const reviews = helper.getReviewable(package.words).map(w => {
+
+        let reviews
+        if(request.query.lesson === 'true') {
+            reviews = helper.getLessons(package.words)
+        } else {
+            reviews = helper.getReviewable(package.words)
+        }
+
+        reviews = reviews.map(w => {
             const sourceWord = source.words.find(s => w.word.equals(s.id))
-            return { ...w.toObject(), spelling: sourceWord.spelling, translations: sourceWord.translations }
+            return {
+                ...w.toObject(),
+                spelling: sourceWord.spelling,
+                translation: sourceWord.translation,
+                synonyms: sourceWord.synonyms
+            }
         })
 
-        console.log(reviews)
         response.json({ words: [ ...reviews ], name: source.name })
 
     } catch (exception) {
@@ -47,12 +59,10 @@ router.put('/:package/:word', async (request, response, next) => {
             //get the translations and synonyms in user's language from package data
             const source = await Package.findById(package.source)
 
-            const translation = source.words
-                .find(w => w.id === word.word.toString()).translations
-                .find(t => t.language === user.language)
+            const original = source.words.find(w => w.id === word.word.toString())
 
             //check if the user's answer equals the correct translation or synonyms
-            const trials = [translation.translation, ...translation.synonyms, ...word.synonyms]
+            const trials = [original.translation, ...original.synonyms, ...word.synonyms]
             const success = trials.find(trial => trial === answer)
 
             const review = {

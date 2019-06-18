@@ -8,7 +8,7 @@ router.get('/', async (request, response, next) => {
         //TODO: Administrator only
 
         const users = await User.find({})
-        response.json(users)
+        response.json(users.map(user => user.toJSON()))
     } catch (exception) {
         next(exception)
     }
@@ -49,7 +49,7 @@ router.get('/:id', async (request, response, next) => {
         //TODO: should be visible only to administrator and to user themselves
 
         const user = await User.findById(request.params.id)
-        response.json(user)
+        response.json(user.toJSON())
     } catch (exception) {
         next(exception)
     }

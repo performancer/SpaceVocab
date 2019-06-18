@@ -49,19 +49,28 @@ body {
 }
 
 .buttonRight {
+  float:left;
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
+  width: 24%;
+  height: 100%;
 }
 
 .buttonLeft {
+  float:left;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
   border-left: none;
+  width: 24%;
+  height: 100%;
 }
 
 .buttonBoth {
+  float:left;
   border-radius: 0;
   border-left: none;
+  width: 24%;
+  height: 100%;
 }
 
 .gray {
