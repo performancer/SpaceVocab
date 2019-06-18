@@ -31,10 +31,19 @@ const getWord = async (pack, id) => {
   return response.data
 }
 
+const create = async (content) => {
+  const config = {
+    headers: { Authorization: token.getToken() },
+  }
+
+  const response = await axios.post(url, content, config)
+  return response.data
+}
 
 export default {
   get,
   getPackage,
   ratePackage,
-  getWord
+  getWord,
+  create
 }

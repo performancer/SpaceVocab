@@ -118,12 +118,28 @@ const PackageInfo = (props) => {
         {' '}{selected.name}
       </h1>
       {store.getState().user ? buttons() : null}
+      {selected.author && store.getState().user.id === selected.author._id ?
+        <div>
+          <br />
+          <span className='fa fa-pencil-square'/>
+          <button className='simpleButton'>
+            <u className='gray'>Edit this package</u>
+          </button>
+        </div>
+        : null
+      }
       <PackagePropsList
         id={selected._id}
         language={selected.language}
         words={selected.words.length}
+        author={selected.author}
       />
-      <div className='details'><span className='small'>Details here</span></div>
+      {selected.details ?
+        <div className='details'>
+          <span className='small'>{selected.details}</span>
+        </div>
+        : null
+      }
       <br />
       <Togglable buttonLabel='show words' closeLabel='hide words'>
         <p>

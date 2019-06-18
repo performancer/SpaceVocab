@@ -108,14 +108,14 @@ const Review = (props) => {
               <input type='text' {...answer.collection} disabled/>
               <button onClick={startNext}>
                 <span className='fa fa-caret-right' />
-            </button>
+              </button>
             </div>
             :
             <div>
               <input type='text' {...answer.collection} />
               <button onClick={respond}>
                 <span className='fa fa-caret-right' />
-            </button>
+              </button>
             </div>
           }
         </div>

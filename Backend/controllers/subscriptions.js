@@ -98,7 +98,7 @@ router.delete('/:id', async (request, response, next) => {
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
 
-        user.packages = user.packages.filter(p => !p.source.equals(id) && !p.id.equals(id))
+        user.packages = user.packages.filter(p => !p.source.equals(id) && !p._id.equals(id))
         user.save()
         response.status(200).json()
     } catch (exception) {

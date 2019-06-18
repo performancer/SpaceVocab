@@ -8,12 +8,17 @@ const packageSchema = mongoose.Schema({
         minlength: 3,
         required: true
     },
+    details: String,
     language: {
         type: String,
         required: true,
         uppercase: true,
         maxlength: 2,
         minlength: 2,
+    },
+    author: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
     },
     words: [{
         spelling: String,
