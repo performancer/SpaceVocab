@@ -6,9 +6,7 @@ import PackagePropsList from './PackagePropsList'
 const PackageEntry = (props) => {
   const {content} = props
 
-  const details = () => {
-    props.history.push(`/packages/${content.id}`)
-  }
+  const details = () => props.history.push(`/packages/${content.id}`)
 
   const getRating = () => {
     const likes = content.opinions.filter(o => o.value > 0 ).length

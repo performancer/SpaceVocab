@@ -6,20 +6,21 @@ import packageService from '../services/packages'
 import WordForm from '../components/WordForm'
 
 const PackageEdit = (props) => {
-  const {selected} = props
+  const {selected, handler} = props
 
-  let language
   const [error, setError] = useState('')
   const [words, setWords] = useState([])
   const [edit, setEdit] = useState(null)
 
   const name = useField('name')
   const description = useField('description')
+  const language = useField('language')
 
   useEffect( () => {
     if(selected) {
       name.setValue(selected.name)
       description.setValue(selected.details)
+      language.setValue(selected.language)
       setWords(selected.words)
     }
   }, [])
@@ -30,7 +31,7 @@ const PackageEdit = (props) => {
     const content = {
       name: name.value,
       details: description.value,
-      language: language,
+      language: language.value,
       words: words
     }
 
@@ -39,7 +40,8 @@ const PackageEdit = (props) => {
     try {
         console.log('saving package')
       if(selected) {
-        await packageService.edit(selected._id, content)
+        await packageService.edit(selected.id, content)
+        handler()
       } else {
         await packageService.create(content)
         props.history.push('/')
@@ -62,10 +64,6 @@ const PackageEdit = (props) => {
     setWords(words.filter(w => w.spelling !== word.spelling))
   }
 
-  const handleChange = (event) => {
-    language = event.target.value
-  }
-
   return (
     <div>
       <form className='center' onSubmit={create}>
@@ -76,7 +74,7 @@ const PackageEdit = (props) => {
         <p><b>Description</b><br />
         <input type="text" {...description.collection}/></p>
         <p><b>Language</b></p>
-        <select onChange={handleChange}>
+        <select {...language.collection}>
           <option>Choose a Language</option>
           <option value="AF">Afrikanns</option>
           <option value="SQ">Albanian</option>

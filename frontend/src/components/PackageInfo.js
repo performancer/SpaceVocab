@@ -15,17 +15,19 @@ const PackageInfo = (props) => {
 
   useEffect(() => {
     packageService.getPackage(props.id).then(selected => {
-      //eject user's opinion from the opinions array
-      const opinion = selected.opinions
-        .find(o => o.user.id === store.getState().user.id)
-      selected.opinions = selected.opinions
-        .filter(o => o.user.id !== store.getState().user.id)
-      //assign property 'opinion' to reflect our opinion of the package
-      selected.opinion = opinion ? opinion.value : 0
+      if(store.getState().user) {
+        //eject user's opinion from the opinions array
+        const opinion = selected.opinions
+          .find(o => o.user.id === store.getState().user.id)
+        selected.opinions = selected.opinions
+          .filter(o => o.user.id !== store.getState().user.id)
+        //assign property 'opinion' to reflect our opinion of the package
+        selected.opinion = opinion ? opinion.value : 0
+      }
       setSelected(selected)
       console.log(selected)
     }).catch( () => { props.history.push('/packages') })
-  }, [store.getState().user])
+  }, [store.getState().user, edit])
 
   const subscribe = async () => {
     try {
@@ -62,7 +64,7 @@ const PackageInfo = (props) => {
   if(!selected)
     return <div className='loader' />
   else if(edit)
-    return <PackageEdit selected={selected} />
+    return <PackageEdit selected={selected} handler={() => setEdit(false)} />
 
   const buttons = () => {
     if(store.getState().user) {

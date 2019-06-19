@@ -56,10 +56,11 @@ router.put('/:id', async (request, response, next) => {
                 package.opinions.push(body)
 
         } else if (package.author && package.author.equals(user.id)) {
-            const { name, details, language, words } = request.body
+            const { name, details, language } = request.body
+            const words = handleWords(request.body.words)
             package.name = name
             package.details = details
-            package.languaghe = language
+            package.language = language
             package.words = words
         }
 
@@ -82,19 +83,19 @@ router.get('/:package/:word', async (request, response, next) => {
 
 router.post('/', async (request, response, next) => {
     try {
+        const author = await helper.getUser(request.token)
 
-        const user = await helper.getUser(request.token)
-
-        if (!user)
+        if (!author)
             return response.status(401).json({ error: 'token missing or invalid' })
 
-        const { name, language, details, words } = request.body
+        const { name, language, details } = request.body
+        const words = handleWords(request.body.words)
 
         const package = new Package({
             name,
             language,
             details,
-            author: user,
+            author,
             words
         })
 
@@ -105,5 +106,11 @@ router.post('/', async (request, response, next) => {
         next(exception)
     }
 })
+
+const handleWords = (words) => {
+    return words.map(w => {
+        return { ...w, spelling: w.spelling.toLowerCase() }
+    })
+}
 
 module.exports = router
