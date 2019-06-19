@@ -6,18 +6,25 @@ import PackagePropsList from './PackagePropsList'
 const PackageEntry = (props) => {
   const {content} = props
 
-  const getRate = () => {
+  const details = () => {
+    props.history.push(`/packages/${content.id}`)
+  }
+
+  const getRating = () => {
     const likes = content.opinions.filter(o => o.value > 0 ).length
     const dislikes = content.opinions.filter(o => o.value < 0 ).length
 
-    return likes - dislikes
-  }
+    const rate = likes - dislikes
+    const color = rate >= 0 ? 'success' : 'error'
+    const emoji = rate >= 0 ? 'fa fa-smile-o' : 'fa fa-meh-o'
 
-  const details = () => {
-    props.history.push(`/packages/${content._id}`)
+    return (
+      <b className={color}>
+        <span className={emoji} />
+        {' '}{rate}
+      </b>
+    )
   }
-
-  const rate = getRate()
 
   return (
     <div className='package' >
@@ -28,34 +35,27 @@ const PackageEntry = (props) => {
             {' '}{content.name}
           </h3>
         </div>
-        <div className='flexItem'>
-          <b className='right'>
-            <span className={rate < 0 ? 'error' : 'success' }>
-              <span className={rate < 0 ? 'fa fa-meh-o' : 'fa fa-smile-o' }/>
-              {' '}{rate}
-            </span>
-          </b>
-        </div>
+        { getRating() }
       </div>
+
       <div className='flexContainer'>
         <div className='flexItem'>
           <PackagePropsList
-            id={content._id}
+            id={content.id}
             language={content.language}
             words={content.words.length}
+            author={content.author ? content.author.username : null}
           />
         </div>
-        <div className='flexItem'>
-          <div className='relative'>
-            <button className='rightbottom' onClick={details}>
-                View Details
-            </button>
-          </div>
+        <div className='relative'>
+          <button className='rightbottom' onClick={details}>
+              View Details
+          </button>
         </div>
       </div>
     </div>
   )
 }
 
-const PackageEntryComponent = withRouter(PackageEntry)
-export default PackageEntryComponent
+const PackageEntryWithHistory = withRouter(PackageEntry)
+export default PackageEntryWithHistory

@@ -10,44 +10,28 @@ import packageService from '../services/packages'
 import subscriptionService from '../services/subscriptions'
 
 const PackageInfo = (props) => {
-  const {id} = props
   const [selected, setSelected] = useState(null)
-  const [subscribed, setSubscribed] = useState(false)
-  const [opinion, setOpinion] = useState(0)
   const [edit, setEdit] = useState(false)
 
-  console.log(selected)
-
   useEffect(() => {
-    packageService.getPackage(id).then(selected => {
-      setSelected( selected )
-
-      if(store.getState().user) {
-        const saved = selected.opinions
-          .find(o => o.user._id === store.getState().user.id)
-
-        if(saved && opinion !== saved.value)
-          setOpinion(saved.value)
-
-        if(subscribed !== selected.subscribed) {
-          setSubscribed(selected.subscribed)
-        }
-      }
-    }).catch( () => {
-      props.history.push('/packages')
-    })
-
+    packageService.getPackage(props.id).then(selected => {
+      //eject user's opinion from the opinions array
+      const opinion = selected.opinions
+        .find(o => o.user.id === store.getState().user.id)
+      selected.opinions = selected.opinions
+        .filter(o => o.user.id !== store.getState().user.id)
+      //assign property 'opinion' to reflect our opinion of the package
+      selected.opinion = opinion ? opinion.value : 0
+      setSelected(selected)
+      console.log(selected)
+    }).catch( () => { props.history.push('/packages') })
   }, [store.getState().user])
-
-  if(!selected) {
-      return <div className='loader' />
-  }
 
   const subscribe = async () => {
     try {
       console.log(`adding '${selected.name}' package to your list`)
-      await subscriptionService.subscribe(id)
-      setSubscribed(true)
+      await subscriptionService.subscribe(selected.id)
+      setSelected({ ...selected, subscribed: true })
       console.log('package subscribed')
     } catch (exception) {
       console.log(exception)
@@ -57,8 +41,8 @@ const PackageInfo = (props) => {
   const unsubscribe = async () => {
     try {
       console.log(`removing package '${selected.name}' from your list`)
-      await subscriptionService.unsubscribe(id)
-      setSubscribed(false)
+      await subscriptionService.unsubscribe(selected.id)
+      setSelected({ ...selected, subscribed: false })
       console.log('package unsubscribed')
     } catch (exception) {
       console.log(exception)
@@ -67,66 +51,51 @@ const PackageInfo = (props) => {
 
   const rate = async (value) => {
     try {
-      value = opinion === value ? 0 : value //clicking again cancels opinion
-      await packageService.ratePackage(selected._id, value)
-      setOpinion(value)
-
+      value = selected.opinion !== value ? value : 0 //clicking again cancels
+      await packageService.ratePackage(selected.id, value)
+      setSelected({...selected, opinion: value})
     } catch (exception) {
       console.log(exception)
     }
   }
 
-  if(edit) {
-    return (
-      <PackageEdit selected={selected} />
-    )
-  }
+  if(!selected)
+    return <div className='loader' />
+  else if(edit)
+    return <PackageEdit selected={selected} />
 
   const buttons = () => {
+    if(store.getState().user) {
       return (
         <div className='centered'>
-          { subscribed ?
-            <button className='borderlessButtonDark' onClick={unsubscribe}>
-              Unsubscribe
-            </button> :
-            <button className='borderlessButtonDark' onClick={subscribe}>
-              Subscribe
-            </button>
-          }
-
-          <button className='borderlessButton' onClick={() => rate(1)}>
-            <span className={opinion > 0 ? 'success' : 'gray'}>
-              <span className='fa fa-thumbs-up' />
-              <span className='small'>
-                {selected.opinions.filter(o =>
-                  o.value > 0
-                  && o.user._id !== store.getState().user.id)
-                  .length + (opinion > 0 ? 1 : 0)}
-              </span>
-            </span>
-          </button>
-          <button className='borderlessButton' onClick={() => rate(-1)}>
-            <span className={opinion < 0 ? 'error' : 'gray'}>
-              <span className='fa fa-thumbs-down' />
-              <span className='small'>
-                {selected.opinions.filter(o =>
-                  o.value < 0
-                  && o.user._id !== store.getState().user.id)
-                  .length + (opinion < 0 ? 1 : 0)}
-              </span>
-            </span>
-          </button>
+          <SubscriptionButton
+            subscribed={selected.subscribed}
+            onSubscribe={subscribe}
+            onUnsubscribe={unsubscribe}
+          />
+          <OpinionButton
+            onClick={() => rate(1)}
+            icon='fa fa-thumbs-up'
+            color={selected.opinion > 0 ? 'success' : 'gray'}
+            count={selected.opinions.filter(o => o.value > 0).length
+              + (selected.opinion > 0 ? 1 : 0)}
+          />
+          <OpinionButton
+            onClick={() => rate(-1)}
+            icon='fa fa-thumbs-down'
+            color={selected.opinion < 0 ? 'error' : 'gray'}
+            count={selected.opinions.filter(o => o.value < 0).length
+              + (selected.opinion < 0 ? 1 : 0)}
+          />
         </div>
       )
+    }
   }
 
-  return (
-    <div className='package'>
-      <h1 className='centered'><span className='fa fa-folder-open-o'/>
-        {' '}{selected.name}
-      </h1>
-      {store.getState().user ? buttons() : null}
-      {selected.author && store.getState().user && store.getState().user.id === selected.author._id ?
+  const authorButton = () => {
+    if(selected.author && store.getState().user
+      && store.getState().user.id === selected.author.id) {
+      return (
         <div>
           <br />
           <span className='fa fa-pencil-square'/>
@@ -134,20 +103,27 @@ const PackageInfo = (props) => {
             <u className='gray'>Edit this package</u>
           </button>
         </div>
-        : null
-      }
+      )
+    }
+  }
+
+  return (
+    <div className='package'>
+      <h1 className='centered'>
+        <span className='fa fa-folder-open-o'/>
+        {' '}{ selected.name }
+      </h1>
+      { buttons() }
+      { authorButton() }
       <PackagePropsList
-        id={selected._id}
+        id={selected.id}
         language={selected.language}
         words={selected.words.length}
-        author={selected.author}
+        author={selected.author ? selected.author.username : null}
       />
-      {selected.details ?
-        <div className='details'>
-          <span className='small'>{selected.details}</span>
-        </div>
-        : null
-      }
+      <div className='details'>
+        <span className='small'>{selected.details}</span>
+      </div>
       <br />
       <Togglable buttonLabel='show words' closeLabel='hide words'>
         <p>
@@ -159,5 +135,23 @@ const PackageInfo = (props) => {
   )
 }
 
-const PackageInfoComponent = withRouter(PackageInfo)
-export default PackageInfoComponent;
+const SubscriptionButton = ({subscribed, onSubscribe, onUnsubscribe}) => {
+  const style = 'borderlessButtonDark'
+  const text = subscribed ? 'Unsubscribe' : 'Subscribe'
+  const handler = subscribed ? onUnsubscribe : onSubscribe
+  return <button className={style} onClick={handler}>{text}</button>
+}
+
+const OpinionButton = ({onClick, icon, color, count}) => {
+  return (
+    <button className='borderlessButton' onClick={onClick}>
+      <span className={color}>
+        <span className={icon} />
+        <span className='small'>{count}</span>
+      </span>
+    </button>
+  )
+}
+
+const PackageInfoWithHistory = withRouter(PackageInfo)
+export default PackageInfoWithHistory;

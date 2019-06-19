@@ -26,7 +26,7 @@ router.get('/:id', async (request, response, next) => {
           && user.packages.find(p => p.source.equals(package.id)) ?
             true : false
 
-        response.json({ ...package.toObject(), subscribed: subscribed })
+        response.json({ ...package.toJSON(), subscribed: subscribed })
     } catch ( exception ) {
         next(exception)
     }
@@ -55,7 +55,7 @@ router.put('/:id', async (request, response, next) => {
             if(opinion !== 0)
                 package.opinions.push(body)
 
-        } else if (package.author.equals(user.id)) {
+        } else if (package.author && package.author.equals(user.id)) {
             const { name, details, language, words } = request.body
             package.name = name
             package.details = details

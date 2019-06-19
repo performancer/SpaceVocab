@@ -19,10 +19,6 @@ const UserPackage = (props) => {
     props.history.push('/review')
   }
 
-  const details = () => {
-    props.history.push(`/packages/${content.source._id}`)
-  }
-
   return (
     <div className='package' >
 
@@ -44,7 +40,7 @@ const UserPackage = (props) => {
             </button> : null
           }
           <button className='buttonLeft' onClick={ () =>
-              props.history.push(`/packages/${content.source._id}`)}>
+              props.history.push(`/packages/${content.source.id}`)}>
             View Page
           </button>
         </div>
