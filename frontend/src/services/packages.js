@@ -49,11 +49,21 @@ const edit = async (id, content) => {
   return response.data
 }
 
+const remove = async (id, content) => {
+  const config = {
+    headers: { Authorization: token.getToken() },
+  }
+
+  const response = await axios.delete(`${url}/${id}`, config)
+  return response.data
+}
+
 export default {
   get,
   getPackage,
   ratePackage,
   getWord,
   create,
-  edit
+  edit,
+  remove
 }

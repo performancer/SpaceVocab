@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const helper = require('../utils/helper')
 const Package = require('../models/package')
+const User = require('../models/user')
 
 router.get('/', async (request, response, next) => {
     try {
@@ -106,6 +107,34 @@ router.post('/', async (request, response, next) => {
         next(exception)
     }
 })
+
+router.delete('/:id', async (request, response, next) => {
+    try {
+        const user = await helper.getUser(request.token)
+
+        if (!user)
+            return response.status(401).json({ error: 'token missing or invalid' })
+
+        const package = await Package.findById(request.params.id)
+
+        if(package.author.equals(user.id)) {
+            package.remove()
+
+            const users = await User.find({})
+            users.map(u => {
+                u.packages = u.packages.filter(p => !p.source.equals(package.id))
+                u.save()
+            })
+
+            return response.status(200).json('package removed')
+        }
+
+        response.status(401)
+    } catch (exception) {
+        next(exception)
+    }
+})
+
 
 const handleWords = (words) => {
     return words.map(w => {

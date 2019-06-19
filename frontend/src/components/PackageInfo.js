@@ -124,7 +124,9 @@ const PackageInfo = (props) => {
         author={selected.author ? selected.author.username : null}
       />
       <div className='details'>
-        <span className='small'>{selected.details}</span>
+        <span className='small'>
+          {selected.details ? selected.details : 'No Description'}
+        </span>
       </div>
       <br />
       <Togglable buttonLabel='show words' closeLabel='hide words'>

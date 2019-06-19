@@ -25,7 +25,7 @@ const PackageEdit = (props) => {
     }
   }, [])
 
-  const create = async (event) => {
+  const save = async (event) => {
     event.preventDefault()
 
     const content = {
@@ -48,7 +48,17 @@ const PackageEdit = (props) => {
       }
       console.log('package saved')
     } catch (exception) {
-      console.log(exception)
+      setError(exception.response.data.error)
+    }
+  }
+
+  const remove = async (event) => {
+    try {
+      console.log('removing package')
+      const response = await packageService.remove(selected.id)
+      console.log(response)
+      props.history.push('/packages')
+    } catch (exception) {
       setError(exception.response.data.error)
     }
   }
@@ -66,8 +76,12 @@ const PackageEdit = (props) => {
 
   return (
     <div>
-      <form className='center' onSubmit={create}>
-        <h1>Create a new Package</h1>
+      <form className='center' onSubmit={save}>
+        <h1>{selected ? 'Edit package' : 'Create a new Package'}</h1>
+        {selected ?
+          <button type='button' onClick={remove}>Remove this Package</button>
+          : null
+        }
         <p className='error'>{error}</p>
         <p><b>Name</b><br />
         <input type="text" {...name.collection}/></p>
@@ -170,7 +184,11 @@ const PackageEdit = (props) => {
           Add Word
         </button>
 
-        <p><button className='borderlessButtonDark' type="submit">Create</button></p>
+        <p>
+          <button className='borderlessButtonDark' type="submit">
+            {selected ? 'Save Changes' : 'Create'}
+          </button>
+        </p>
       </form>
 
       {edit ? <WordForm word={edit} handler={addWord}/> : null}

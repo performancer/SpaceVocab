@@ -1,21 +1,16 @@
 import React, {useState, useEffect} from 'react'
 import { withRouter } from 'react-router-dom'
 import subscriptionService from '../services/subscriptions'
-import token from '../utils/token'
+import store from '../store'
 
-const Progress = (props) => {
-  const {id} = props
+const ProgressList = (props) => {
   const [subscription, setSubscription] = useState(null)
 
   useEffect( () => {
-      subscriptionService.get(id).then(s => setSubscription(s)).catch( () => {
-        props.history.push('/')
-      })
-  }, [])
-
-  if(!token.exists()) {
-    return <div>You need to log in to view your packages</div>
-  }
+      subscriptionService.get(props.id)
+      .then(s => setSubscription(s))
+      .catch( () => {props.history.push('/')})
+  }, [store.getState().user])
 
   if(!subscription)
     return <div className='loader' />
@@ -59,5 +54,5 @@ const Progress = (props) => {
   )
 }
 
-const ProgressPage = withRouter(Progress)
-export default ProgressPage
+const ProgressListWithHistory = withRouter(ProgressList)
+export default ProgressListWithHistory
