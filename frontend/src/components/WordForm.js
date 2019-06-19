@@ -11,13 +11,11 @@ const WordForm = ({word, handler}) => {
   const synonym = useField('synonym')
 
   useEffect( () => {
-
       spelling.setValue(word.spelling)
       translation.setValue(word.translation)
 
       if(word.synonyms)
         setSynonyms(word.synonyms)
-        
   }, [word])
 
   const save = async (event) => {
@@ -25,6 +23,7 @@ const WordForm = ({word, handler}) => {
      setError(false)
 
      const content = {
+       _id: word ? word._id : null,
        spelling: spelling.value,
        translation: translation.value,
        synonyms: synonyms

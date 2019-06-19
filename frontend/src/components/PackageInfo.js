@@ -2,6 +2,7 @@ import React, { useState, useEffect }  from 'react';
 import { withRouter } from 'react-router-dom'
 import store from '../store'
 
+import PackageEdit from '../components/PackageEdit'
 import PackagePropsList from '../components/PackagePropsList'
 import Togglable from '../components/Togglable'
 
@@ -13,6 +14,7 @@ const PackageInfo = (props) => {
   const [selected, setSelected] = useState(null)
   const [subscribed, setSubscribed] = useState(false)
   const [opinion, setOpinion] = useState(0)
+  const [edit, setEdit] = useState(false)
 
   console.log(selected)
 
@@ -74,6 +76,12 @@ const PackageInfo = (props) => {
     }
   }
 
+  if(edit) {
+    return (
+      <PackageEdit selected={selected} />
+    )
+  }
+
   const buttons = () => {
       return (
         <div className='centered'>
@@ -118,11 +126,11 @@ const PackageInfo = (props) => {
         {' '}{selected.name}
       </h1>
       {store.getState().user ? buttons() : null}
-      {selected.author && store.getState().user.id === selected.author._id ?
+      {selected.author && store.getState().user && store.getState().user.id === selected.author._id ?
         <div>
           <br />
           <span className='fa fa-pencil-square'/>
-          <button className='simpleButton'>
+          <button className='simpleButton' onClick={() => setEdit(true)}>
             <u className='gray'>Edit this package</u>
           </button>
         </div>
@@ -151,5 +159,5 @@ const PackageInfo = (props) => {
   )
 }
 
-const PackageInfoPage = withRouter(PackageInfo)
-export default PackageInfoPage;
+const PackageInfoComponent = withRouter(PackageInfo)
+export default PackageInfoComponent;

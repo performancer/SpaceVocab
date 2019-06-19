@@ -1,11 +1,13 @@
-import React, { useState }  from 'react';
+import React, { useState, useEffect }  from 'react';
 import { withRouter } from 'react-router-dom'
 import { useField } from '../hooks'
 import packageService from '../services/packages'
 
 import WordForm from '../components/WordForm'
 
-const Create = (props) => {
+const PackageEdit = (props) => {
+  const {selected} = props
+
   let language
   const [error, setError] = useState('')
   const [words, setWords] = useState([])
@@ -13,6 +15,14 @@ const Create = (props) => {
 
   const name = useField('name')
   const description = useField('description')
+
+  useEffect( () => {
+    if(selected) {
+      name.setValue(selected.name)
+      description.setValue(selected.details)
+      setWords(selected.words)
+    }
+  }, [])
 
   const create = async (event) => {
     event.preventDefault()
@@ -24,11 +34,17 @@ const Create = (props) => {
       words: words
     }
 
+    console.log(content)
+
     try {
-      console.log('creating a package')
-      const response = await packageService.create(content)
-      console.log('package created')
-      props.history.push('/')
+        console.log('saving package')
+      if(selected) {
+        await packageService.edit(selected._id, content)
+      } else {
+        await packageService.create(content)
+        props.history.push('/')
+      }
+      console.log('package saved')
     } catch (exception) {
       console.log(exception)
       setError(exception.response.data.error)
@@ -138,7 +154,7 @@ const Create = (props) => {
         <p><b>Words</b></p>
         {
           words.map(w =>
-            <div className='flexContainer'>
+            <div key={w.spelling} className='flexContainer'>
               <div className='flexItem'>
                 <button type='button' className='wideButton' onClick={() => setEdit(w)}>
                   <b>{w.spelling}</b> = {w.translation} ({w.synonyms.length} synonyms)
@@ -164,5 +180,5 @@ const Create = (props) => {
   )
 }
 
-const RegisterComponent = withRouter(Create)
-export default RegisterComponent
+const PackageEditComponent = withRouter(PackageEdit)
+export default PackageEditComponent

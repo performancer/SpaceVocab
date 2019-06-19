@@ -4,7 +4,11 @@ const Package = require('../models/package')
 
 router.get('/', async (request, response, next) => {
     try {
-        const packages = await Package.find({}).populate('likes.user', { username: 1 })
+        const packages = await Package
+            .find({})
+            .populate('author', { username: 1 })
+            .populate('likes.user', { username: 1 })
+
         response.json(packages)
     } catch ( exception ) {
         next(exception)
@@ -15,10 +19,12 @@ router.get('/:id', async (request, response, next) => {
     try {
         const user = await helper.getUser(request.token)
         const package = await Package.findById(request.params.id)
-            .populate('opinions.user', { username: 1 })
             .populate('author', { username: 1 })
+            .populate('opinions.user', { username: 1 })
 
-        const subscribed = user && user.packages.find(p => p.source.equals(package.id)) ? true : false
+        const subscribed = user
+          && user.packages.find(p => p.source.equals(package.id)) ?
+            true : false
 
         response.json({ ...package.toObject(), subscribed: subscribed })
     } catch ( exception ) {
@@ -28,40 +34,40 @@ router.get('/:id', async (request, response, next) => {
 
 router.put('/:id', async (request, response, next) => {
     try {
-
         const user = await helper.getUser(request.token)
 
         if (!user)
-            return response.status(401).json({ error: 'token missing or invalid' })
+            return response.status(401)
+                .json({ error: 'token missing or invalid' })
 
         const package = await Package.findById(request.params.id)
-        const value = request.body.value
+        const opinion = request.body.opinion
 
-        if(value > 1 || value < -1)
-            return response.status(401)
+        //if there is an opinion, value can only be 1, 0 or -1
+        if(opinion === 1 || opinion === 0 || opinion === -1) {
+            const body = { user: user.id, value: opinion }
 
-        const body = {
-            user: user.id,
-            value: value
-        }
+            //remove earlier opinion(s) by this user
+            package.opinions = package.opinions
+                .filter(l => !l.user.equals(user.id))
 
-        if(!package.likes) {
-            package.likes = []
-        } else {
-            package.likes = package.likes.filter(l => !l.user.equals(user.id))
-        }
+            //if the opinion is not neutral, push it
+            if(opinion !== 0)
+                package.opinions.push(body)
 
-        if(value !== 0) {
-            package.likes.push(body)
+        } else if (package.author.equals(user.id)) {
+            const { name, details, language, words } = request.body
+            package.name = name
+            package.details = details
+            package.languaghe = language
+            package.words = words
         }
 
         package.save()
         response.json(package)
-
     } catch ( exception ) {
         next(exception)
     }
-
 })
 
 router.get('/:package/:word', async (request, response, next) => {

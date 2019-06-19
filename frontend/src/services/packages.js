@@ -40,10 +40,20 @@ const create = async (content) => {
   return response.data
 }
 
+const edit = async (id, content) => {
+  const config = {
+    headers: { Authorization: token.getToken() },
+  }
+
+  const response = await axios.put(`${url}/${id}`, content, config)
+  return response.data
+}
+
 export default {
   get,
   getPackage,
   ratePackage,
   getWord,
-  create
+  create,
+  edit
 }
