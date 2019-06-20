@@ -11,17 +11,13 @@ const get = async (id, lesson) => {
   return response.data
 }
 
-const review = async (pack, word, answer) => {
+const put = async (pack, word, body) => {
   const config = {
     headers: { Authorization: token.getToken() },
-  }
-
-  const body = {
-    answer: answer
   }
 
   const response = await axios.put(`${url}/${pack}/${word}`, body, config)
   return response.data
 }
 
-export default { get, review }
+export default { get, put }

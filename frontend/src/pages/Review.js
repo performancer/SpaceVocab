@@ -12,6 +12,7 @@ const Review = (props) => {
   const [details, setDetails] = useState(false)
 
   const answer = useField('answer')
+  const synonym = useField('synonym')
 
   useEffect(() => {
     if(!info || !info.id)
@@ -20,12 +21,14 @@ const Review = (props) => {
     reviewService.get(info.id, info.lesson).then(r => {
       i = Math.floor(Math.random() * r.words.length)
       setReviews(r)
+      console.log(r)
     })
   }, [info])
 
   const respond = async () => {
     try {
-      const response = await reviewService.review(info.id, getWord()._id, answer.value )
+      const response = await reviewService
+          .put(info.id, getWord()._id,  { answer: answer.value } )
 
       if(response.success) {
         setNotification({note: 'Correct!', type: 'success'})
@@ -35,6 +38,35 @@ const Review = (props) => {
 
       setDetails(true)
 
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+
+  const addSynonym = async () => {
+    try {
+      const response = await reviewService
+          .put(info.id, getWord()._id, { synonym: synonym.value })
+
+      const copy = {...reviews}
+      copy.words[i].synonyms.push(synonym.value)
+      setReviews(copy)
+      synonym.reset()
+      console.log(response)
+    } catch (exception) {
+      console.log(exception)
+    }
+  }
+
+  const removeSynonym = async (toRemove) => {
+    try {
+      const response = await reviewService
+          .put(info.id, getWord()._id, { synonym: toRemove})
+
+      const copy = {...reviews}
+      copy.words[i].synonyms = copy.words[i].synonyms.filter(s => s !== toRemove)
+      setReviews(copy)
+      console.log(response)
     } catch (exception) {
       console.log(exception)
     }
@@ -72,7 +104,18 @@ const Review = (props) => {
       <div>
         <div className='details'>
           Correct Answer: <b>{word.translation}</b><br />
-        Alternatives: {word.synonyms.join(', ')}
+          Alternatives: {word.alternatives.join(', ')}<br /><br />
+          Synonyms:
+          {word.synonyms.map(s => <li key={s}>
+            {s}{' '}
+            <b className="pointer" onClick={() => removeSynonym(s)}>&times;</b>
+          </li>)}
+          <div className='synonymInput'>
+            <input type='text' placeholder="add synonym" {...synonym.collection} />
+            <button type='button' onClick={addSynonym}>
+              <span className='fa fa-caret-right' />
+            </button>
+          </div>
         </div>
         <div className='details'>
           Details: {getWord().details}

@@ -7,7 +7,6 @@ const WordForm = ({word, handler}) => {
 
   const spelling = useField('spelling')
   const translation = useField('translation')
-
   const synonym = useField('synonym')
 
   useEffect( () => {
@@ -56,9 +55,9 @@ const WordForm = ({word, handler}) => {
         <form className="modal-body" onSubmit={save}>
           <p className='error'>{error}</p>
           <p><b>The Word</b><br />
-          <input type="text" {...spelling.collection}/></p>
+          <input type='text' {...spelling.collection}/></p>
           <p><b>Translation</b><br />
-          <input type="text" {...translation.collection}/></p>
+          <input type='text' {...translation.collection}/></p>
           <p>
             <b>Synonyms</b><br />
             {

@@ -1,9 +1,9 @@
 import React, { useState, useEffect }  from 'react';
-import UserPackage from '../components/UserPackage'
+import UserPackage from './UserPackage'
 import subscriptionService from '../services/subscriptions'
 import store from '../store'
 
-const Home = ({reviewHandler}) => {
+const SubscriptionList = ({reviewHandler}) => {
   const [subscriptions, setSubscriptions] = useState(null)
 
   useEffect(() => {
@@ -36,4 +36,4 @@ const Home = ({reviewHandler}) => {
   }
 }
 
-export default Home
+export default SubscriptionList

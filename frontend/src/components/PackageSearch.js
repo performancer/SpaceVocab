@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import PackageEntry from '../components/PackageEntry'
+import PackageEntry from './PackageEntry'
 import packageService from '../services/packages'
 
 const PackageSearch = () => {

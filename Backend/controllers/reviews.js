@@ -16,12 +16,8 @@ router.get('/:package', async (request, response, next) => {
 
         const source = await Package.findById(package.source)
 
-        let reviews
-        if(request.query.lesson === 'true') {
-            reviews = helper.getLessons(package.words)
-        } else {
-            reviews = helper.getReviewable(package.words)
-        }
+        let reviews = request.query.lesson === 'true' ?
+            helper.getLessons(package.words) : helper.getReviewable(package.words)
 
         reviews = reviews.map(w => {
             const sourceWord = source.words.find(s => w.word.equals(s.id))
@@ -29,7 +25,7 @@ router.get('/:package', async (request, response, next) => {
                 ...w.toObject(),
                 spelling: sourceWord.spelling,
                 translation: sourceWord.translation,
-                synonyms: sourceWord.synonyms
+                alternatives: sourceWord.synonyms
             }
         })
 
@@ -82,8 +78,14 @@ router.put('/:package/:word', async (request, response, next) => {
 
         if(synonym){
             console.log(`SYNONYM word:${word} package:${package} synonym:${synonym}`)
-            word.synonyms.push(synonym)
-            response.status(200)
+
+            if(word.synonyms.includes(synonym)) {
+                word.synonyms = word.synonyms.filter(s => s !== synonym)
+                response.status(200).json('synonym removed')
+            } else {
+                word.synonyms.push(synonym)
+                response.status(200).json('synonym added')
+            }
         }
 
         package.words = package.words.map(w => w.id === request.params.word ? word : w)
