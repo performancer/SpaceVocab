@@ -20,7 +20,7 @@ const ratePackage = async(id, value) => {
   const config = {
     headers: { Authorization: token.getToken() },
   }
-  const body = { value: value }
+  const body = { opinion: value }
 
   const response = await axios.put(`${url}/${id}`, body, config)
   return response.data

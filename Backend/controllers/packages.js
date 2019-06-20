@@ -168,11 +168,13 @@ router.delete('/:id', async (request, response, next) => {
     }
 })
 
-
 const handleWords = (words) => {
-    return words.map(w => {
-        return { ...w, spelling: w.spelling.toLowerCase() }
-    })
+    if(words) {
+        return words.map(w => {
+            return{ ...w, spelling: w.spelling.toLowerCase()
+            }
+        })
+    }
 }
 
 module.exports = router

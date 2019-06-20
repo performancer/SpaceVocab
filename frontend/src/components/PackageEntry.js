@@ -4,25 +4,9 @@ import { withRouter } from 'react-router-dom'
 import PackagePropsList from './PackagePropsList'
 
 const PackageEntry = (props) => {
-  const {content} = props
+  const {id, name, rating, language, words, author } = props.content
 
-  const details = () => props.history.push(`/packages/${content.id}`)
-
-  const getRating = () => {
-    const likes = content.opinions.filter(o => o.value > 0 ).length
-    const dislikes = content.opinions.filter(o => o.value < 0 ).length
-
-    const rate = likes - dislikes
-    const color = rate >= 0 ? 'success' : 'error'
-    const emoji = rate >= 0 ? 'fa fa-smile-o' : 'fa fa-meh-o'
-
-    return (
-      <b className={color}>
-        <span className={emoji} />
-        {' '}{rate}
-      </b>
-    )
-  }
+  const details = () => props.history.push(`/packages/${id}`)
 
   return (
     <div className='package' >
@@ -30,19 +14,19 @@ const PackageEntry = (props) => {
         <div className='flexItem'>
           <h3 className='pointer' onClick={details}>
             <span className='fa fa-folder-o'/>
-            {' '}{content.name}
+            {' '}{name}
           </h3>
         </div>
-        { getRating() }
+        <b className={rating >= 0 ? 'success' : 'error'}>
+          <span className={rating >= 0 ? 'fa fa-smile-o' : 'fa fa-meh-o'} />
+          {` ${rating}`}
+        </b>
       </div>
 
       <div className='flexContainer'>
         <div className='flexItem'>
-          <PackagePropsList
-            id={content.id}
-            language={content.language}
-            words={content.words.length}
-            author={content.author ? content.author.username : null}
+          <PackagePropsList id={id} language={language} words={words.length}
+            author={author ? author.username : null}
           />
         </div>
         <div className='relative'>
