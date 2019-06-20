@@ -71,6 +71,9 @@ router.put('/:package/:word', async (request, response, next) => {
             }
 
             //push the new review data to user version of word data
+            if(!word.stage)
+                word.stage = 0
+
             word.stage += success ? (word.stage < 4 ? 1 : 0) : (word.stage < 2 ? 0 : -1)
             word.reviews.push(review)
 

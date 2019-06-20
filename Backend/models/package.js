@@ -40,6 +40,14 @@ packageSchema.set('toJSON', {
         returnedObject.id = returnedObject._id.toString()
         delete returnedObject._id
         delete returnedObject.__v
+
+        if(returnedObject.words) {
+            returnedObject.words = returnedObject.words.map(w => {
+                w.id = w._id.toString()
+                delete w._id
+                return w
+            })
+        }
     }
 })
 

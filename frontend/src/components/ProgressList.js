@@ -8,7 +8,10 @@ const ProgressList = (props) => {
 
   useEffect( () => {
       subscriptionService.get(props.id)
-      .then(s => setSubscription(s))
+      .then(s => {
+        setSubscription(s)
+        console.log(s)
+      })
       .catch( () => {props.history.push('/')})
   }, [store.getState().user])
 
@@ -30,7 +33,8 @@ const ProgressList = (props) => {
       default: className = 'unknownWord'; break
     }
 
-    const words = subscription.words.filter(w => w.stage === stage)
+    const words = subscription.words
+        .filter(w => stage === 0 ? !w.stage || w.stage === stage : w.stage === stage)
 
     if(words.length > 0) {
       return (

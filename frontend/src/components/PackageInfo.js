@@ -132,7 +132,7 @@ const PackageInfo = (props) => {
       <Togglable buttonLabel='show words' closeLabel='hide words'>
         <p>
           {selected.words
-            .map(w => <b key={w._id} className='word'>{w.spelling}</b>)}
+            .map(w => <b key={w.id} className='word'>{w.spelling}</b>)}
         </p>
       </Togglable>
     </div>

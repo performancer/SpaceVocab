@@ -56,16 +56,49 @@ router.put('/:id', async (request, response, next) => {
             if(opinion !== 0)
                 package.opinions.push(body)
 
+            package.save()
+
         } else if (package.author && package.author.equals(user.id)) {
             const { name, details, language } = request.body
             const words = handleWords(request.body.words)
             package.name = name
             package.details = details
             package.language = language
-            package.words = words
+            package.words = words.map(w => { return { ...w, _id: w.id }})
+
+            console.log(words)
+
+            package.save()
+            const users = await User.find({})
+
+            users.map(u => {
+                const subscription = u.packages
+                    .find(s => s.source.equals(package.id))
+
+                if(subscription) {
+                    //remove references to words that do not exist anymore
+                    subscription.words = subscription.words
+                        .filter(r => package.words.find(w => r.word.equals(w.id)) ? true : false)
+
+                    console.log(subscription)
+
+                    //add references to newly added words
+                    package.words.filter(w => subscription.words.find(r => r.word.equals(w.id)) ? false : true)
+                        .map(w => subscription.words.push({ word: w.id }))
+
+                    //filter the old version out
+                    u.packages = u.packages
+                        .filter(s => !s.source.equals(package.id))
+
+                    //push the new copy in
+                    u.packages.push(subscription)
+                    u.save()
+
+                    console.log(subscription)
+                }
+            })
         }
 
-        package.save()
         response.json(package)
     } catch ( exception ) {
         next(exception)

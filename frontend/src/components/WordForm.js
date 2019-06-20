@@ -23,7 +23,7 @@ const WordForm = ({word, handler}) => {
      setError(false)
 
      const content = {
-       _id: word ? word._id : null,
+       id: word ? word.id : null,
        spelling: spelling.value,
        translation: translation.value,
        synonyms: synonyms

@@ -23,7 +23,7 @@ const getToken = (user) => {
 }
 
 const getLessons = (words) => {
-    return words.filter(word => word.stage === 0)
+    return words.filter(word => !word.stage || word.stage === 0)
 }
 
 const getReviewable = (words) => {
@@ -31,7 +31,7 @@ const getReviewable = (words) => {
 
         //if this word has not been reviewed before, it's a lesson
         //if this word is in 'perfect' stage it will never be reviewed again
-        if (word.stage === 0 || word.stage === 4)
+        if (!word.stage || word.stage === 0 || word.stage === 4)
             return false
 
         //calculate the current stage of this word based on successes
