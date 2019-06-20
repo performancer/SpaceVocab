@@ -70,21 +70,15 @@ const PackageInfo = (props) => {
     if(store.getState().user) {
       return (
         <div className='centered'>
-          <SubscriptionButton
-            subscribed={selected.subscribed}
-            onSubscribe={subscribe}
-            onUnsubscribe={unsubscribe}
+          <SubscriptionButton subscribed={selected.subscribed}
+            onSubscribe={subscribe} onUnsubscribe={unsubscribe}
           />
-          <OpinionButton
-            onClick={() => rate(1)}
-            icon='fa fa-thumbs-up'
+          <OpinionButton onClick={() => rate(1)} icon='fa fa-thumbs-up'
             color={selected.opinion > 0 ? 'success' : 'gray'}
             count={selected.opinions.filter(o => o.value > 0).length
               + (selected.opinion > 0 ? 1 : 0)}
           />
-          <OpinionButton
-            onClick={() => rate(-1)}
-            icon='fa fa-thumbs-down'
+          <OpinionButton onClick={() => rate(-1)} icon='fa fa-thumbs-down'
             color={selected.opinion < 0 ? 'error' : 'gray'}
             count={selected.opinions.filter(o => o.value < 0).length
               + (selected.opinion < 0 ? 1 : 0)}
@@ -94,7 +88,7 @@ const PackageInfo = (props) => {
     }
   }
 
-  const authorButton = () => {
+  const editButton = () => {
     if(selected.author && store.getState().user
       && store.getState().user.id === selected.author.id) {
       return (
@@ -116,7 +110,7 @@ const PackageInfo = (props) => {
         {' '}{ selected.name }
       </h1>
       { buttons() }
-      { authorButton() }
+      { editButton() }
       <PackagePropsList
         id={selected.id}
         language={selected.language}

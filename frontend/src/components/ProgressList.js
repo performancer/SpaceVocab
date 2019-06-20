@@ -19,41 +19,39 @@ const ProgressList = (props) => {
     return <div className='loader' />
 
   const getWords = (stage) => {
-    let className = 'word'
-    let title = 'Unknown'
+    for(let i = 4; i >= 0; i--) {
+      let className = 'word'
+      let title
 
-    switch(stage) {
-      case 4:
-        className = 'perfectWord'
-        title = 'Perfect'
-      break
-      case 3: title = 'Very good'; break
-      case 2: title = 'Good'; break
-      case 1: title = 'Basic'; break
-      default: className = 'unknownWord'; break
-    }
+      switch(stage) {
+        case 4: className = 'perfectWord'; title = 'Perfect'; break
+        case 3: title = 'Very good'; break
+        case 2: title = 'Good'; break
+        case 1: title = 'Basic'; break
+        default: className = 'unknownWord'; title = 'Unknown'; break
+      }
 
-    const words = subscription.words
-        .filter(w => stage === 0 ? !w.stage || w.stage === stage : w.stage === stage)
+      const words = subscription.words.filter(w => stage === 0 ? !w.stage
+            || w.stage === stage : w.stage === stage)
 
-    if(words.length > 0) {
-      return (
-       <div className='package'>
-         <div className='centered'><b>{title}</b></div>
-         {words.map(w => <b key={w._id} className={className}>{w.spelling}</b>)}
-       </div>
-      )
+      if(words.length > 0) {
+        return (
+         <div className='package'>
+           <div className='centered'><b>{title}</b></div>
+           {
+             words.map(w => 
+             <b key={w._id} className={className}>{w.spelling}</b>)
+           }
+         </div>
+        )
+      }
     }
   }
 
   return (
     <div>
       <h3>Progress in '{subscription.source.name}'</h3>
-      {getWords(4)}
-      {getWords(3)}
-      {getWords(2)}
-      {getWords(1)}
-      {getWords(0)}
+      { getWords() }
     </div>
   )
 }

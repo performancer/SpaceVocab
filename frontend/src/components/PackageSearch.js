@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useField } from '../hooks'
-import packageService from '../services/packages'
 import PackageEntry from './PackageEntry'
+import packageService from '../services/packages'
 
 const PackageSearch = () => {
   const [packages, setPackages] = useState(null)
@@ -35,7 +35,7 @@ const PackageSearch = () => {
   return (
     <div>
       <h2>Search Packages</h2>
-      <input type='text' placeHolder='enter a keyword '{...keyword.collection}/>
+      <input type='text' placeholder='enter a keyword '{...keyword.collection}/>
       {
         packages
         .filter(packet => compare(packet, keyword.value))

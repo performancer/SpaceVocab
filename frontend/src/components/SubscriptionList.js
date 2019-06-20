@@ -1,19 +1,15 @@
 import React, { useState, useEffect }  from 'react';
 import UserPackage from './UserPackage'
 import subscriptionService from '../services/subscriptions'
-import store from '../store'
 
 const SubscriptionList = ({reviewHandler}) => {
   const [subscriptions, setSubscriptions] = useState(null)
 
   useEffect(() => {
-    if(store.getState().user)
-      subscriptionService.get().then(s => setSubscriptions(s))
-  }, [store.getState().user])
+    subscriptionService.get().then(s => setSubscriptions(s))
+  }, [])
 
-  if(!store.getState().user)
-    return <div>You need to log in to view your packages</div>
-  else if(!subscriptions)
+  if(!subscriptions)
     return <div className='loader' />
 
   if(subscriptions.length !== 0) {
@@ -21,8 +17,8 @@ const SubscriptionList = ({reviewHandler}) => {
       <div>
         <h2>My Subscriptions</h2>
         {subscriptions.map(s =>
-          <UserPackage key={s.id} content={s} reviewHandler={reviewHandler}/>
-        )}
+          <UserPackage key={s.id} content={s} reviewHandler={reviewHandler}/>)
+        }
       </div>
     )
   } else {

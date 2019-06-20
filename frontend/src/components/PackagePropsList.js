@@ -11,6 +11,6 @@ const PackagePropsList = ({id, language, words, author}) => {
   )
 }
 
-const PropsEntry = ({attribute, value}) => <li>{attribute}: <b>{value}</b> </li>
+const PropsEntry = ({attribute, value}) => <li>{attribute}: <b>{value}</b></li>
 
 export default PackagePropsList
