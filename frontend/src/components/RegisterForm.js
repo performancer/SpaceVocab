@@ -4,7 +4,7 @@ import { useField } from '../hooks'
 import userService from '../services/users'
 import helper from '../utils/helper'
 
-const Register = (props) => {
+const RegisterForm = (props) => {
   const [error, setError] = useState("")
 
   const username = useField('username')
@@ -46,10 +46,10 @@ const Register = (props) => {
         <p><b>Password</b><br />
         <input type="password" {...password.collection}/></p>
         <p><input type="password" {...repeatPassword.collection}/></p>
-        <p><button className='borderlessButtonDark' type="submit">Sign up</button></p>
+        <p><button className='dark' type="submit">Sign up</button></p>
       </form>
   )
 }
 
-const RegisterComponent = withRouter(Register)
-export default RegisterComponent
+const RegisterFormWithHistory= withRouter(RegisterForm)
+export default RegisterFormWithHistory

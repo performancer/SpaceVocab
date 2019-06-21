@@ -3,7 +3,6 @@ import { useField } from '../hooks'
 import loginService from '../services/login'
 import helper from '../utils/helper'
 
-
 const LoginForm = ({visibilityHandler, registerHandler}) => {
   const [error, setError] = useState("")
 
@@ -49,13 +48,13 @@ const LoginForm = ({visibilityHandler, registerHandler}) => {
           <input type="text" {...username.collection}/></p>
           <p><b>Password</b><br />
           <input type="password"{...password.collection}/></p>
-          <p><button className='borderlessButtonDark' type="submit">Login</button></p>
+          <p><button className='dark' type="submit">Login</button></p>
         </form>
         <div className="modal-footer">
           <p>
             Do not have an account?
-            <button className='simpleButton'
-                onClick={ () => {setError(false); registerHandler()}}>
+            <button className='simple'
+              onClick={ () => {setError(false); registerHandler()}}>
               Sign up
             </button>
             now!

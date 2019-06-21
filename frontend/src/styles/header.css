@@ -23,23 +23,3 @@
     color: gray;
     background-color: #224;
 }
-
-.menuButton {
-  flex-grow: 1;
-  padding: 0 1em;
-  text-align: center;
-}
-
-.menuButton > button {
-  color: white;
-  font-size: 30px;
-  margin:0;
-  padding:0;
-  background:none;
-  border:none;
-  cursor: pointer;
-}
-
-.menuButton > button:hover {
-  background:none;
-}

@@ -7,8 +7,8 @@ import SubscriptionList from './components/SubscriptionList'
 import ProgressList from './components/ProgressList'
 import PackageInfo from './components/PackageInfo'
 import PackageSearch from './components/PackageSearch'
-import RegisterPage from './pages/Register'
-import ReviewPage from './pages/Review'
+import RegisterForm from './components/RegisterForm'
+import ReviewForm from './pages/ReviewForm'
 import PackageEdit from './components/PackageEdit'
 
 import helper from './utils/helper'
@@ -18,6 +18,9 @@ import './styles/header.css'
 import './styles/packages.css'
 import './styles/modal.css'
 import './styles/loader.css'
+
+import './styles/buttons.css'
+import './styles/inputs.css'
 
 const App = () => {
   useEffect(() => {
@@ -46,10 +49,11 @@ const Routing = () => {
     <Switch>
       <Route exact path="/"
         render={() =>
-          store.getState().user ? <SubscriptionList /> : <p>Please log in.</p>
+          store.getState().user ? <SubscriptionList />
+        : <button className="wide">Please log in.</button>
       } />
       <Route exact path="/register" render={() =>
-          !store.getState().user ? <RegisterPage /> : <Redirect to="/" />
+          !store.getState().user ? <RegisterForm /> : <Redirect to="/" />
       } />
       <Route exact path="/subscriptions/:id" render={({ match }) =>
         store.getState().user ?
@@ -60,7 +64,7 @@ const Routing = () => {
         render={({ match }) => <PackageInfo id={match.params.id} />}
       />
       <Route exact path="/review"
-        render={() => <ReviewPage info={helper.getReviews()} />}
+        render={() => <ReviewForm info={helper.getReviews()} />}
       />
       <Route exact path="/edit" render={() => <PackageEdit />} />
       <Route exact path='*' render={ () => <Redirect to="/" />} />

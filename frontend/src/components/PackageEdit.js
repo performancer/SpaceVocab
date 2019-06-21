@@ -168,24 +168,24 @@ const PackageEdit = (props) => {
           words.map(w =>
             <div key={w.spelling} className='flexContainer'>
               <div className='flexItem'>
-                <button type='button' className='wideButton' onClick={() => setEdit(w)}>
+                <button type='button' className='wide' onClick={() => setEdit(w)}>
                   <b>{w.spelling}</b> = {w.translation} ({w.synonyms.length} synonyms)
                 </button>
               </div>
               <div className='flexItem'>
-                <button type='button' className='wideButton' onClick={() => removeWord(w)}>
+                <button type='button' className='wide' onClick={() => removeWord(w)}>
                   &times;
                 </button>
               </div>
             </div>
           )
         }
-        <button type='button' className='wideButton' onClick={() => setEdit({})}>
+        <button type='button' className='wide' onClick={() => setEdit({})}>
           Add Word
         </button>
 
         <p>
-          <button className='borderlessButtonDark' type="submit">
+          <button className='dark' type="submit">
             {selected ? 'Save Changes' : 'Create'}
           </button>
         </p>

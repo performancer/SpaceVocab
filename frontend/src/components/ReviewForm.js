@@ -5,7 +5,7 @@ import reviewService from '../services/reviews'
 
 let i = 0
 
-const Review = (props) => {
+const ReviewForm = (props) => {
   const {info} = props
   const [reviews, setReviews] = useState(null)
   const [notification, setNotification] = useState(null)
@@ -110,7 +110,7 @@ const Review = (props) => {
             {s}{' '}
             <b className="pointer" onClick={() => removeSynonym(s)}>&times;</b>
           </li>)}
-          <div className='synonymInput'>
+          <div className='synonymbar'>
             <input type='text' placeholder="add synonym" {...synonym.collection} />
             <button type='button' onClick={addSynonym}>
               <span className='fa fa-caret-right' />
@@ -144,7 +144,7 @@ const Review = (props) => {
         </div>
       </div>
       <div className='centered'>
-        <div className='answerBar'>
+        <div className='answerbar'>
           {notification ? <b className={notification.type}>{notification.note}</b> : null }
           { details ?
             <div>
@@ -155,7 +155,7 @@ const Review = (props) => {
             </div>
             :
             <div>
-              <input type='text' {...answer.collection} />
+              <input type='text' placeholder='enter your answer'{...answer.collection} />
               <button onClick={respond}>
                 <span className='fa fa-caret-right' />
               </button>
@@ -173,5 +173,5 @@ const Review = (props) => {
   )
 }
 
-const ReviewPage = withRouter(Review)
-export default ReviewPage
+const ReviewFormWithHistory = withRouter(ReviewForm)
+export default ReviewFormWithHistory

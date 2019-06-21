@@ -24,25 +24,27 @@ const UserPackage = (props) => {
 
       <div className='flexContainer'>
         <div className='flexItem'><h3>{content.source.name}</h3></div>
-        <div>
-          <button className='buttonRight' onClick={ () =>
+        <div className='flexItem'>
+          <div className='flexContainer'>
+          <button className='right' onClick={ () =>
               props.history.push(`/subscriptions/${content.id}`)}>
             Progress
           </button>
           {content.lessons > 0 ?
-            <button className='buttonBoth' onClick={startLesson}>
-              Start Lessons
+            <button className='middle' onClick={startLesson}>
+              Start<br />Lessons
             </button> : null
           }
           {content.reviews > 0 ?
-            <button className='buttonBoth' onClick={startReview}>
-              Start Reviews
+            <button className='middle' onClick={startReview}>
+              Start<br />Reviews
             </button> : null
           }
-          <button className='buttonLeft' onClick={ () =>
+          <button className='left' onClick={ () =>
               props.history.push(`/packages/${content.source.id}`)}>
-            View Page
+            View<br />Page
           </button>
+          </div>
         </div>
       </div>
 

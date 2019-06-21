@@ -26,12 +26,12 @@ const LoginStatus = (props) => {
       <div className='login'>
         <p>
           You are not logged in.
-          <button className='simpleButton'
+          <button className='simple'
             onClick={() => setModalVisible(true)}>
             Login
           </button>
           or
-          <button className='simpleButton' onClick={register}>
+          <button className='simple' onClick={register}>
             Sign up
           </button>
         </p>

@@ -13,8 +13,8 @@ const Header = () => {
   const getSettingsGear = () => {
     if(store.getState().user) {
       return (
-        <div className='menuButton'>
-          <button className='right'
+        <div>
+          <button className='menu'
             onClick={() =>  {
               setSpin(!setRef.current.getVisible())
               setRef.current.toggleVisibility()
@@ -32,8 +32,8 @@ const Header = () => {
   return (
     <header>
       <div className='flexContainer'>
-        <div className='menuButton'>
-          <button className='left'
+        <div className='flexItem'>
+          <button className='menu'
             onClick={() => {
               navRef.current.toggleVisibility()
               setRef.current.setVisible(false)

@@ -48,40 +48,6 @@ body {
   font-family: 'Trebuchet MS', Helvetica, sans-serif;
 }
 
-.buttonRight {
-  float:left;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-
-  max-height:3.7em;
-  min-width: 6em;
-  width: 24%;
-  height: 100%;
-}
-
-.buttonLeft {
-  float:left;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-  border-left: none;
-
-  max-height:3.7em;
-  min-width: 6em;
-  width: 24%;
-  height: 100%;
-}
-
-.buttonBoth {
-  float:left;
-  border-radius: 0;
-  border-left: none;
-
-  max-height:3.7em;
-  min-width: 6em;
-  width: 24%;
-  height: 100%;
-}
-
 .gray {
   color: gray
 }
@@ -92,21 +58,6 @@ body {
 
 .success {
   color: green
-}
-
-.simpleButton {
-  font-size: 16px;
-  color: white;
-  text-decoration: underline;
-  margin: 0 0.3em;
-  padding:0;
-  background:none;
-  border:none;
-  cursor: pointer;
-}
-
-.simpleButton:hover {
-  background:none;
 }
 
 .flexContainer {
@@ -135,44 +86,4 @@ footer {
   width: 100%;
   height: 1em;
   bottom: 0;
-}
-
-button {
-  margin: 0;
-  padding: 0.5em;
-  background:none;
-  background-color: #CCE;
-  border: solid;
-  border-radius: 10px;
-  border-color: #88A;
-  cursor: pointer;
-}
-
-button:hover{
-  background-color: #88A;
-}
-
-button:focus {
-  outline: 0
-}
-
-input, select {
-  padding: 0 0.2em;
-  font-size: 25px;
-  border: solid #557;
-  border-radius: 5px;
-  height: 1.5em;
-  width: 95%;
-  max-width: 15em;
-}
-
-.wideButton {
-  width: 100%;
-  background-color: white;
-  border-radius: 0;
-  border-color: gray;
-  border-width: 0.05em;
-  border-left: none;
-  border-right: none;
-  font-size: large;
 }

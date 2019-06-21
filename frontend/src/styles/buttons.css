@@ -1,0 +1,84 @@
+button {
+  background-color: #CCE;
+  border: solid;
+  border-color: #88A;
+  border-radius: 10px;
+  cursor: pointer;
+  padding: 0.5em;
+}
+
+button:focus {
+  outline: 0
+}
+
+button.right, button.middle, button.left {
+  flex-basis: 0;
+  flex-grow: 1;
+}
+
+button.right {
+  border-bottom-right-radius: 0;
+  border-top-right-radius: 0;
+}
+
+button.middle {
+  border-left: none;
+  border-radius: 0;
+}
+
+button.left {
+  border-bottom-left-radius: 0;
+  border-left: none;
+  border-top-left-radius: 0;
+}
+
+button.borderless, button.dark {
+  border: none;
+  border-radius: 4px;
+  font-size: larger;
+  font-weight: bold;
+  margin: 0.1em;
+  padding: 0.2em 0.5em;
+}
+
+button.borderless {
+  background-color: #DDF;
+}
+
+button.dark {
+  background-color: #335;
+  color: white;
+}
+
+button:hover{
+  background-color: #88A;
+}
+
+button.simple, button.wide, button.menu {
+  background: none;
+  border: none;
+  border-radius: 0;
+}
+
+button.simple {
+  color: white;
+  font-size: medium;
+  text-decoration: underline;
+  padding: 0 0.3em;
+}
+
+button.wide {
+  border-top: solid gray 1px;
+  font-size: large;
+  width: 100%;
+}
+
+button.wide:hover {
+  background-color: LightGray;
+}
+
+button.menu {
+  color: white;
+  font-size: xx-large;
+  padding:0;
+}

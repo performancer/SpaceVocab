@@ -95,7 +95,7 @@ const PackageInfo = (props) => {
         <div>
           <br />
           <span className='fa fa-pencil-square'/>
-          <button className='simpleButton' onClick={() => setEdit(true)}>
+          <button className='simple' onClick={() => setEdit(true)}>
             <u className='gray'>Edit this package</u>
           </button>
         </div>
@@ -134,15 +134,14 @@ const PackageInfo = (props) => {
 }
 
 const SubscriptionButton = ({subscribed, onSubscribe, onUnsubscribe}) => {
-  const style = 'borderlessButtonDark'
   const text = subscribed ? 'Unsubscribe' : 'Subscribe'
   const handler = subscribed ? onUnsubscribe : onSubscribe
-  return <button className={style} onClick={handler}>{text}</button>
+  return <button className='dark' onClick={handler}>{text}</button>
 }
 
 const OpinionButton = ({onClick, icon, color, count}) => {
   return (
-    <button className='borderlessButton' onClick={onClick}>
+    <button className='borderless' onClick={onClick}>
       <span className={color}>
         <span className={icon} />
         <span className='small'>{count}</span>
