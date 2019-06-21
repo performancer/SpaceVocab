@@ -3,7 +3,7 @@ import { useField } from '../hooks'
 import loginService from '../services/login'
 import helper from '../utils/helper'
 
-const LoginForm = ({visibilityHandler, registerHandler}) => {
+const LoginForm = React.forwardRef(({register}, ref) => {
   const [error, setError] = useState("")
 
   const username = useField('username')
@@ -24,7 +24,7 @@ const LoginForm = ({visibilityHandler, registerHandler}) => {
         const user = await loginService.login(credentials)
         helper.login(user)
         console.log("logged in successfully")
-        visibilityHandler(false)
+        ref.current.setVisible(false)
       } catch (exception) {
         setError('Invalid username and/or password')
       }
@@ -32,7 +32,7 @@ const LoginForm = ({visibilityHandler, registerHandler}) => {
 
   const hide = () => {
     setError(false)
-    visibilityHandler(false)
+    ref.current.setVisible(false)
   }
 
   return (
@@ -54,7 +54,7 @@ const LoginForm = ({visibilityHandler, registerHandler}) => {
           <p>
             Do not have an account?
             <button className='simple'
-              onClick={ () => {setError(false); registerHandler()}}>
+              onClick={ () => {setError(false); register()}}>
               Sign up
             </button>
             now!
@@ -63,6 +63,6 @@ const LoginForm = ({visibilityHandler, registerHandler}) => {
       </div>
     </div>
   )
-}
+})
 
 export default LoginForm

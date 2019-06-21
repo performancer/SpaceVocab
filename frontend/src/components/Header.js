@@ -47,18 +47,21 @@ const Header = () => {
       <LoginStatus />
       <Togglable ref={navRef}>
         <div className='centered' onClick={() => navRef.current.setVisible(false)}>
+          <Link className='link' to="/">
+            {store.getState().user ? 'My Subscriptions' : 'Introduction'}
+          </Link>
           {store.getState().user ?
-            <div>
-              <Link className='link' to="/">My Subscriptions</Link>
-              <Link className='link' to="/edit">Create Package</Link>
-            </div>
-            : null
+              <Link className='link' to="/edit">Create Package</Link> : null
           }
           <Link className='link' to="/packages">Search for Packages</Link>
         </div>
       </Togglable>
       <Togglable ref={setRef}>
-        <div className='centered'>
+        <div className='centered'
+          onClick={() => {
+            setRef.current.setVisible(false)
+            setSpin(false)
+          }}>
           <div className='link' onClick={helper.logout}>Log out</div>
         </div>
       </Togglable>

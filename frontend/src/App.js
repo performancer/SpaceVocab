@@ -13,14 +13,13 @@ import PackageEdit from './components/PackageEdit'
 
 import helper from './utils/helper'
 
-import './styles/basic.css'
-import './styles/header.css'
-import './styles/packages.css'
-import './styles/modal.css'
-import './styles/loader.css'
-
+import './styles/styles.css'
 import './styles/buttons.css'
 import './styles/inputs.css'
+import './styles/packages.css'
+
+import './styles/modal.css'
+import './styles/loader.css'
 
 const App = () => {
   useEffect(() => {

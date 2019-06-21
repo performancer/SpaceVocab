@@ -1,59 +1,45 @@
-import React, {useState} from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
 import store from '../store'
 import LoginForm from './LoginForm'
+import Togglable from './Togglable'
 
 const LoginStatus = (props) => {
-  const [modalVisible, setModalVisible] = useState(false)
+  const modalRef = React.createRef()
 
   const register = () => {
-    setModalVisible(false)
+    modalRef.current.setVisible(false)
     props.history.push('/register')
   }
 
-  const renderUser = () => {
+  if(store.getState().user) {
     return(
-      <div className='login'>
-        <span className='left'><b className="fa fa-user"> {' '}
-          {store.getState().user.username}</b>
-        </span>
+      <div>
+        <br />
+        <b className="fa fa-user"> {store.getState().user.username}</b>
       </div>
     )
   }
-
-  const renderLogin = () => {
-    return (
-      <div className='login'>
-        <p>
-          You are not logged in.
-          <button className='simple'
-            onClick={() => setModalVisible(true)}>
-            Login
-          </button>
-          or
-          <button className='simple' onClick={register}>
-            Sign up
-          </button>
-        </p>
-      </div>
-    )
-  }
-
-  if(store.getState().user)
-      return renderUser()
 
   return (
     <div>
-      { renderLogin() }
-      { (modalVisible) ?
-        <LoginForm
-        visibilityHandler={setModalVisible} registerHandler={register}
-        />
-        : null
-      }
+      <p>
+        You are not logged in.
+        <button className='simple'
+          onClick={() => modalRef.current.setVisible(true)}>
+          Login
+        </button>
+        or
+        <button className='simple' onClick={register}>
+          Sign up
+        </button>
+      </p>
+      <Togglable ref={modalRef}>
+        <LoginForm ref={modalRef} register={register}/>
+      </Togglable>
     </div>
   )
 }
 
-const Login = withRouter(LoginStatus)
-export default Login
+const LoginStatusWithHistory = withRouter(LoginStatus)
+export default LoginStatusWithHistory

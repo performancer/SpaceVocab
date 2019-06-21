@@ -75,15 +75,29 @@ body {
   text-align: center;
 }
 
-header, footer {
+.link {
+  display: block;
+
+  border-top: solid;
+  border-color: #446;
+
+  padding: 1em 0;
+  background-color: #335;
+
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+
+  cursor: pointer;
+}
+
+.link:hover {
+    color: gray;
+    background-color: #224;
+}
+
+header {
   background-color: #335;
   color: #FFF;
   padding: 5px;
-}
-
-footer {
-  position: fixed;
-  width: 100%;
-  height: 1em;
-  bottom: 0;
 }

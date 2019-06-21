@@ -44,8 +44,9 @@ const RegisterForm = (props) => {
         <p><b>Username</b><br />
         <input type="text" {...username.collection}/></p>
         <p><b>Password</b><br />
-        <input type="password" {...password.collection}/></p>
-        <p><input type="password" {...repeatPassword.collection}/></p>
+        <input type="password" {...password.collection}/>
+        <b>Password Again</b><br />
+        <input type="password" {...repeatPassword.collection}/></p>
         <p><button className='dark' type="submit">Sign up</button></p>
       </form>
   )

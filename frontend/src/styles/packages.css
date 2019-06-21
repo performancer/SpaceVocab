@@ -6,19 +6,20 @@
   padding: 5px;
 }
 
+.word, .perfect, .unknown {
+  margin: 5px;
+}
+
 .word {
   background-color: LightBlue;
-  margin: 5px;
 }
 
-.perfectWord {
+.perfect {
   background-color: gold;
-  margin: 5px;
 }
 
-.unknownWord {
+.unknown {
   background-color: gray;
-  margin: 5px;
 }
 
 .details {
