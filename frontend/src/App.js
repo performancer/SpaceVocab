@@ -8,7 +8,7 @@ import ProgressList from './components/ProgressList'
 import PackageInfo from './components/PackageInfo'
 import PackageSearch from './components/PackageSearch'
 import RegisterForm from './components/RegisterForm'
-import ReviewForm from './pages/ReviewForm'
+import ReviewForm from './components/ReviewForm'
 import PackageEdit from './components/PackageEdit'
 
 import helper from './utils/helper'
