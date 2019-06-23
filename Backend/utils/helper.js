@@ -45,7 +45,6 @@ const getReviewable = (words) => {
         //calculate the wait untill this word can be reviewed again
         const duration = stage * 360000
 
-        return true
         //if the duration has passed the word can be reviewed again
         return milliseconds > duration
     })
