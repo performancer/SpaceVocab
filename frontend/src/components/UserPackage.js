@@ -17,6 +17,21 @@ const UserPackage = (props) => {
     props.history.push('/review')
   }
 
+  const getTime = (milliseconds) => {
+    const minute = 60 * 1000
+    const hour = 60 * minute
+    const day = 24 * hour
+
+    if(milliseconds > day)
+      return `${Math.ceil(milliseconds / day)} days`
+    else if ( milliseconds > hour)
+      return `${Math.ceil(milliseconds / hour)} hours`
+    else if ( milliseconds > minute )
+      return `${Math.ceil(milliseconds / minute)} minutes`
+    else
+      return 'less than a minute'
+  }
+
   return (
     <div className='package' >
 
@@ -56,8 +71,8 @@ const UserPackage = (props) => {
             <b>{content.lessons}</b>
           </p>
         </div>
-        {content.reviews === 0 ?
-          <p>Cannot review right now, try again later.</p> : null  }
+        {content.next > 0 ?
+          <p>Next review  in {getTime(content.next)}</p> : null  }
       </div>
     </div>
   )
