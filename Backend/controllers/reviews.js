@@ -19,7 +19,7 @@ router.get('/:package', async (request, response, next) => {
         const source = await Package.findById(package.source)
 
         let reviews = request.query.lesson === 'true' ?
-            helper.getLessons(package.words) : helper.getReviewable(package.words)
+            helper.getLessons(package.words) : helper.getReviews(package.words)
 
         reviews = reviews.map(w => {
             const sourceWord = source.words.find(s => w.word.equals(s.id))
