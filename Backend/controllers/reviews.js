@@ -1,10 +1,12 @@
 const router = require('express').Router()
+const similarity = require('string-similarity')
+const authentication = require('../utils/authentication')
 const helper = require('../utils/helper')
 const Package = require('../models/package')
 
 router.get('/:package', async (request, response, next) => {
     try {
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
@@ -38,28 +40,28 @@ router.get('/:package', async (request, response, next) => {
 
 router.put('/:package/:word', async (request, response, next) => {
     try {
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
 
-        const package = user.packages.find(p => p.id === request.params.package)
-        const word = package.words.find(w => w.id === request.params.word)
+        const subscription = user.packages.find(p => p.id === request.params.package)
+        const word = subscription.words.find(w => w.id === request.params.word)
         const answer = request.body.answer     //answer submitted by the user
         const synonym = request.body.synonym   //custom synonym submitte by the user
 
         //handle a review
-        if(answer){
+        if( answer && helper.isReviewable(word)){
             //console.log(`REVIEW word:${word} package:${package} userlang:${user.language} answer:${answer}`)
 
             //get the translations and synonyms in user's language from package data
-            const source = await Package.findById(package.source)
+            const source = await Package.findById(subscription.source)
 
             const original = source.words.find(w => w.id === word.word.toString())
 
-            //check if the user's answer equals the correct translation or synonyms
-            const trials = [original.translation, ...original.synonyms, ...word.synonyms]
-            const success = trials.find(trial => trial === answer)
+            //check if the answer is similar to the translation or a synonym
+            const correct = [original.translation, ...original.synonyms, ...word.synonyms]
+            const success = correct.find(c => similarity.compareTwoStrings(c, answer) >= 0.6)
 
             const review = {
                 date: (new Date()).getTime(),
@@ -77,7 +79,7 @@ router.put('/:package/:word', async (request, response, next) => {
         }
 
         if(synonym){
-            console.log(`SYNONYM word:${word} package:${package} synonym:${synonym}`)
+            console.log(`SYNONYM word:${word} package:${subscription} synonym:${synonym}`)
 
             if(word.synonyms.includes(synonym)) {
                 word.synonyms = word.synonyms.filter(s => s !== synonym)
@@ -88,8 +90,8 @@ router.put('/:package/:word', async (request, response, next) => {
             }
         }
 
-        package.words = package.words.map(w => w.id === request.params.word ? word : w)
-        user.packages = user.packages.map(p => p.id === request.params.package ? package : p)
+        subscription.words = subscription.words.map(w => w.id === request.params.word ? word : w)
+        user.packages = user.packages.map(p => p.id === request.params.package ? subscription : p)
         await user.save()
 
     } catch (exception) {

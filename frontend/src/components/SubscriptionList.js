@@ -6,7 +6,9 @@ const SubscriptionList = ({reviewHandler}) => {
   const [subscriptions, setSubscriptions] = useState(null)
 
   useEffect(() => {
-    subscriptionService.get().then(s => setSubscriptions(s))
+    subscriptionService.get().then(subscriptions => {
+      console.log(subscriptions)
+      setSubscriptions(subscriptions)})
   }, [])
 
   if(!subscriptions)

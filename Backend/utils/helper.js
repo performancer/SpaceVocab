@@ -1,55 +1,38 @@
-const jwt = require('jsonwebtoken')
-const User = require('../models/user')
 
-const getUser = async (token) => {
-    if (!token)
-        return null
+const getLessons = (words) => words.filter(word => word.stage === 0)
+const getReviews = (words) => words.filter(word => isReviewable(word))
 
-    const decodedToken = jwt.verify(token, process.env.SECRET)
+const isReviewable = (word) => {
+    //if this word has not been reviewed before, it's a lesson
+    if (word.stage === 0)
+        return false
+    //if this word is in 'perfect' stage it will never be reviewed again
+    if (word.stage === 4)
+        return false
 
-    if (!decodedToken.id)
-        return null
-
-    return await User.findById(decodedToken.id).populate('packages.source', { name: 1 })
+    //if the current time has passed the next review time
+    return new Date().getTime() > getReviewTime(word)
 }
 
-const getToken = (user) => {
-    const userForToken = {
-        username: user.username,
-        id: user.id,
-    }
+const getReviewTime = (word) => {
+    //get the date of the last review (milliseconds)
+    const last = word.reviews[word.reviews.length - 1]
+    const date = last ? last.date.getTime() : 0
+    //calculate the space untill this word can be reviewed again (milliseconds)
+    const space = Math.pow(word.stage, 3) * 24 * 60 * 60 * 1000
 
-    return jwt.sign(userForToken, process.env.SECRET)
+    return date + space
 }
 
-const getLessons = (words) => {
-    return words.filter(word => !word.stage || word.stage === 0)
+const getNextReview = (words) => {
+    const now = new Date().getTime()
+    const array = words.map(word => getReviewTime(word) - now)
+    return Math.min(...array)
 }
 
-const getReviewable = (words) => {
-    const reviewables = words.filter(word => {
-
-        //if this word has not been reviewed before, it's a lesson
-        //if this word is in 'perfect' stage it will never be reviewed again
-        if (!word.stage || word.stage === 0 || word.stage === 4)
-            return false
-
-        //calculate the current stage of this word based on successes
-        var stage = 0
-        for(var i = 0; i <word.reviews.length; i++)
-            stage += (!word.reviews[i].success && stage > 0) ? -1 : 1
-
-        //get milliseconds from the time of last review
-        const latestReview = word.reviews[word.reviews.length - 1]
-        const milliseconds = (new Date()).getTime() - latestReview.datetime
-        //calculate the wait untill this word can be reviewed again
-        const duration = stage * 360000
-
-        //if the duration has passed the word can be reviewed again
-        return milliseconds > duration
-    })
-
-    return reviewables
+module.exports = {
+    getLessons,
+    getReviews,
+    isReviewable,
+    getNextReview
 }
-
-module.exports = { getUser, getToken, getLessons, getReviewable }

@@ -3,9 +3,9 @@ const getTokenFrom = request => {
 
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
         return authorization.substring(7)
+    } else {
+        return null
     }
-
-    return null
 }
 
 const tokenExtractor = (request, response, next) => {

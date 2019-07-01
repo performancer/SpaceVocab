@@ -1,10 +1,11 @@
 const router = require('express').Router()
+const authentication = require('../utils/authentication')
 const helper = require('../utils/helper')
 const Package = require('../models/package')
 
 router.get('/', async (request, response, next) => {
     try {
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
@@ -14,7 +15,8 @@ router.get('/', async (request, response, next) => {
                 id: package.id,
                 source: package.source,
                 lessons: helper.getLessons(package.words).length,
-                reviews: helper.getReviewable(package.words).length
+                reviews: helper.getReviews(package.words).length,
+                next: helper.getNextReview(package.words)
             }
         })
 
@@ -28,7 +30,7 @@ router.get('/', async (request, response, next) => {
 router.post('/', async (request, response, next) => {
     try {
         const id = request.body.id
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
@@ -63,7 +65,7 @@ router.post('/', async (request, response, next) => {
 
 router.get('/:id', async (request, response, next) => {
     try {
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
@@ -88,7 +90,7 @@ router.get('/:id', async (request, response, next) => {
 router.delete('/:id', async (request, response, next) => {
     try {
         const id = request.params.id
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })

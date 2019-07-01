@@ -5,8 +5,6 @@ import helper from '../utils/helper'
 const UserPackage = (props) => {
   const {content} = props
 
-  console.log(content)
-
   const startLesson = () => {
     console.log('start lessons')
     helper.setReviews({id: content.id, lesson: true})

@@ -1,22 +1,11 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
+const authentication = require('../utils/authentication')
 const User = require('../models/user')
-const helper = require('../utils/helper')
-
-router.get('/', async (request, response, next) => {
-    try {
-        //TODO: Administrator only
-
-        const users = await User.find({})
-        response.json(users.map(user => user.toJSON()))
-    } catch (exception) {
-        next(exception)
-    }
-})
 
 router.post('/', async (request, response, next) => {
     try {
-        //TODO: email
+        //TODO: email IF we want to make email notifications
 
         const { username, password, language } = request.body
 
@@ -36,7 +25,7 @@ router.post('/', async (request, response, next) => {
         })
 
         const user = await userData.save()
-        const token = helper.getToken(user)
+        const token = authentication.getToken(user)
 
         response.status(200).send({ token, username: user.username })
     } catch (exception) {
@@ -44,15 +33,23 @@ router.post('/', async (request, response, next) => {
     }
 })
 
+/*
+router.get('/', async (request, response, next) => {
+    try {
+        const users = await User.find({})
+        response.json(users.map(user => user.toJSON()))
+    } catch (exception) {
+        next(exception)
+    }
+})
+
 router.get('/:id', async (request, response, next) => {
     try {
-        //TODO: should be visible only to administrator and to user themselves
-
         const user = await User.findById(request.params.id)
         response.json(user.toJSON())
     } catch (exception) {
         next(exception)
     }
-})
+})*/
 
 module.exports = router

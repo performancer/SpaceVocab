@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt')
 const router = require('express').Router()
+const authentication = require('../utils/authentication')
 const User = require('../models/user')
-const helper = require('../utils/helper')
 
 router.post('/', async (request, response, next) => {
     try {
@@ -12,19 +12,13 @@ router.post('/', async (request, response, next) => {
             : await bcrypt.compare(body.password, user.passwordHash)
 
         if (!user || !passwordCorrect) {
-            return response.status(401).json({
-                error: 'invalid username or password'
-            })
+            return response.status(401)
+                .json({ error: 'invalid username or password' })
         }
 
-        const token = helper.getToken(user)
-        response.status(200).send(
-            {
-                token,
-                username: user.username,
-                id: user.id
-            }
-        )
+        const token = authentication.createToken(user)
+        response.status(200)
+            .send({ token, username: user.username, id: user.id })
     } catch (exception) {
         next(exception)
     }

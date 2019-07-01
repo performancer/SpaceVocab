@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const helper = require('../utils/helper')
+const authentication = require('../utils/authentication')
 const Package = require('../models/package')
 const User = require('../models/user')
 
@@ -18,7 +18,8 @@ router.get('/', async (request, response, next) => {
 
 router.get('/:id', async (request, response, next) => {
     try {
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
+
         const package = await Package.findById(request.params.id)
             .populate('author', { username: 1 })
             .populate('opinions.user', { username: 1 })
@@ -35,7 +36,7 @@ router.get('/:id', async (request, response, next) => {
 
 router.put('/:id', async (request, response, next) => {
     try {
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401)
@@ -117,7 +118,7 @@ router.get('/:package/:word', async (request, response, next) => {
 
 router.post('/', async (request, response, next) => {
     try {
-        const author = await helper.getUser(request.token)
+        const author = await authentication.getUser(request.token)
 
         if (!author)
             return response.status(401).json({ error: 'token missing or invalid' })
@@ -143,7 +144,7 @@ router.post('/', async (request, response, next) => {
 
 router.delete('/:id', async (request, response, next) => {
     try {
-        const user = await helper.getUser(request.token)
+        const user = await authentication.getUser(request.token)
 
         if (!user)
             return response.status(401).json({ error: 'token missing or invalid' })
