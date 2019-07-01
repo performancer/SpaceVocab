@@ -51,7 +51,7 @@ router.put('/:package/:word', async (request, response, next) => {
         const synonym = request.body.synonym   //custom synonym submitte by the user
 
         //handle a review
-        if( answer && helper.isReviewable(word)){
+        if( answer && (word.stage === 0 || helper.isReviewable(word))){
             //console.log(`REVIEW word:${word} package:${package} userlang:${user.language} answer:${answer}`)
 
             //get the translations and synonyms in user's language from package data
