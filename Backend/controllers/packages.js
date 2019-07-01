@@ -85,7 +85,7 @@ router.put('/:id', async (request, response, next) => {
 
                     //add references to newly added words
                     package.words.filter(w => subscription.words.find(r => r.word.equals(w.id)) ? false : true)
-                        .map(w => subscription.words.push({ word: w.id }))
+                        .map(w => subscription.words.push({ word: w.id, stage: 0 }))
 
                     //filter the old version out
                     u.packages = u.packages

@@ -48,7 +48,7 @@ router.post('/', async (request, response, next) => {
         const data = {
             source: source.id,
             words: source.words.map(w => {
-                return { word: w.id }
+                return { word: w.id, stage: 0 }
             })
         }
 
