@@ -14,6 +14,7 @@ const reviewRouter = require('./controllers/reviews')
 const packageRouter = require('./controllers/packages')
 
 app.use(cors())
+app.use(express.static('build'))
 app.use(bodyParser.json())
 
 console.log('connecting to', config.MONGODB_URI)
