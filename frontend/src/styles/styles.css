@@ -67,6 +67,7 @@ body {
 
 .flexItem {
   flex-grow: 1;
+  padding: 1px;
 }
 
 .flexItemCenter {
