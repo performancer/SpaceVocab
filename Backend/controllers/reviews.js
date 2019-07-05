@@ -61,7 +61,7 @@ router.put('/:package/:word', async (request, response, next) => {
 
             //check if the answer is similar to the translation or a synonym
             const correct = [original.translation, ...original.synonyms, ...word.synonyms]
-            const success = correct.find(c => similarity.compareTwoStrings(c, answer) >= 0.6)
+            const success = correct.find(c => similarity.compareTwoStrings(c.toLowerCase(), answer.toLowerCase()) >= 0.6)
 
             const review = {
                 date: (new Date()).getTime(),
