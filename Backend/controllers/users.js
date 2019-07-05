@@ -25,7 +25,7 @@ router.post('/', async (request, response, next) => {
         })
 
         const user = await userData.save()
-        const token = authentication.getToken(user)
+        const token = authentication.createToken(user)
 
         response.status(200).send({ token, username: user.username })
     } catch (exception) {
