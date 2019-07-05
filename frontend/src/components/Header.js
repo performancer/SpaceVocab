@@ -42,6 +42,10 @@ const Header = () => {
             <span className="fa fa-bars" />
           </button>
         </div>
+        <div className='flexItem'>
+          <b>SpaceVocab</b>
+          <span className="fa fa-rocket" />
+        </div>
         {getSettingsGear()}
       </div>
       <LoginStatus />

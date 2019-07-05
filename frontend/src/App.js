@@ -49,7 +49,16 @@ const Routing = () => {
       <Route exact path="/"
         render={() =>
           store.getState().user ? <SubscriptionList />
-        : <button className="wide">Please log in.</button>
+        : <div>
+        <p>SpaceVocab is a spaced repetation system that can be used to learn
+          new vocabulary efficiently.
+        </p>
+        <p>
+          Choose from existing packets which words you'd like to learn or
+          customize your own!
+        </p>
+        <p>Give it a try by signing up!</p>
+        </div>
       } />
       <Route exact path="/register" render={() =>
           !store.getState().user ? <RegisterForm /> : <Redirect to="/" />
