@@ -14,7 +14,6 @@ const reviewRouter = require('./controllers/reviews')
 const packageRouter = require('./controllers/packages')
 
 app.use(cors())
-app.use(express.static('build'))
 app.use(bodyParser.json())
 
 console.log('connecting to', config.MONGODB_URI)
@@ -34,6 +33,11 @@ app.use('/api/users', userRouter)
 app.use('/api/subscriptions', subscriptionsRouter)
 app.use('/api/reviews', reviewRouter)
 app.use('/api/packages', packageRouter)
+
+app.use(express.static('build'))
+app.get('*', function(req, res) {
+    res.sendFile('index.html', { root: __dirname + '/build' })
+})
 
 app.use(errorHandler)
 
