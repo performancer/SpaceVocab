@@ -50,8 +50,7 @@ router.put('/:package/:word', async (request, response, next) => {
         const answer = request.body.answer     //answer submitted by the user
         const synonym = request.body.synonym   //custom synonym submitte by the user
 
-        //handle a review
-        if( answer && (word.stage === 0 || helper.isReviewable(word))){
+        if( answer ){
             //console.log(`REVIEW word:${word} package:${package} userlang:${user.language} answer:${answer}`)
 
             //get the translations and synonyms in user's language from package data
@@ -68,13 +67,17 @@ router.put('/:package/:word', async (request, response, next) => {
                 success: success ? true : false
             }
 
-            //push the new review data to user version of word data
-            if(!word.stage)
-                word.stage = 0
+            if (word.stage === 0 || helper.isReviewable(word)) {
+              //push the new review data to user version of word data
 
-            word.stage += success ? (word.stage < 4 ? 1 : 0) : (word.stage < 2 ? 0 : -1)
-            word.reviews.push(review)
+              if(!word.stage)
+                  word.stage = 0
 
+              word.stage += success ? (word.stage < 4 ? 1 : 0) : (word.stage < 2 ? 0 : -1)
+              word.reviews.push(review)
+            }
+
+            //always respond with the result, even when it is too early
             response.status(200).json(review)
         }
 
