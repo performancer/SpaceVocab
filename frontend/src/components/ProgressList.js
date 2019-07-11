@@ -23,11 +23,11 @@ const ProgressList = (props) => {
     let title
 
     switch(stage) {
-      case 4: className = 'perfect'; title = 'Perfect'; break
+      case 4: title = 'Perfect'; className = 'perfect'; break
       case 3: title = 'Very good'; break
       case 2: title = 'Good'; break
       case 1: title = 'Basic'; break
-      default: className = 'unknown'; title = 'Unknown'; break
+      default: title = 'Unknown'; className = 'unknown'; break
     }
 
     const words = subscription.words.filter(w => stage === 0 ? (!w.stage
@@ -37,10 +37,12 @@ const ProgressList = (props) => {
       return (
        <div className='package'>
          <div className='centered'><b>{title}</b></div>
-         {
-           words.map(w =>
-           <b key={w._id} className={className}>{w.spelling}</b>)
-         }
+           <div className='words'>
+           {
+             words.map(w =>
+             <b key={w._id} className={className}>{w.spelling}</b>)
+           }
+           </div>
        </div>
       )
     }

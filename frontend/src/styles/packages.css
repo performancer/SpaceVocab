@@ -6,6 +6,11 @@
   padding: 5px;
 }
 
+.words {
+  display: flex;
+  flex-wrap: wrap;
+}
+
 .word, .perfect, .unknown {
   margin: 5px;
 }
